@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt")
 const cors = require("cors")
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const {validate} = require("./jwtMiddleware.js")
+const {VerifyToken} = require("./jwtMiddleware.js")
+const SECRET_KEY = process.env.SECRET_KEY
 
 const app = express()
 app.use(express.json())
@@ -23,7 +24,6 @@ app.post("/signup", async(req,res)=>{
     if (!email || !username || !password || !phoneNumber || isNaN(Number(phoneNumber))){
         return res.status(400).json({"message":"Missing credentials"})
     }
-    // phoneNumber = Number(phoneNumber)
     if (!emailRegex.test(email)){
         return res.status(403).json({"error":"Email is not valid"})
     }
@@ -31,7 +31,9 @@ app.post("/signup", async(req,res)=>{
         return res.status(403).json({"error":"Password must contain at least 8 characters, 1 letter, 1 number, and 1 special character"})
     }
     let available = await prisma.user.findUnique({
-        where:{email:email}
+        where:{
+            email:email
+        }
     })
     if (available){
         return res.status(400).json({"error":"User with this email already exists, please LOGIN"})
@@ -51,7 +53,6 @@ app.post("/signup", async(req,res)=>{
 })
 
 app.post("/login",async(req,res)=>{
-    // const passRegex=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&) 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const {email,password}= req.body
     if (!email || !password){
@@ -74,7 +75,7 @@ app.post("/login",async(req,res)=>{
         return res.status(403).json({"error":"Wrong Password"})
     }
    
-        const token = jwt.sign({ userId: available.id, email:available.email }, "SECRET_KEY", { expiresIn: "1h" });
+    const token = jwt.sign({ userId: available.id, email:available.email }, SECRET_KEY, { expiresIn: "1h" });
     
     return res.status(200).json(
         {message:"Login successful",
@@ -91,7 +92,8 @@ app.post("/login",async(req,res)=>{
 
 })
 
-app.get("/profile", validate,(req,res)=>{
+
+app.get("/profile", VerifyToken,(req,res)=>{
     return res.status(200).json({message: "Access granted", user: req.user})
 })
 app.listen(3000,()=>(console.log("Server is running on 3000")))
