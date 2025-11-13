@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import "../css/auth.css"
 import { api } from "../api.js"
+import { useNavigate } from 'react-router-dom'
 
 
 const SignUp = () => {
+    const navigate = useNavigate()
     const [form, setForm] = useState(
         {
             username: "",
             email: "",
             phoneNumber: "",
-            password: ""
+            password: "",
+            role:""
         }
     )
     function handleChange(e){
@@ -23,7 +26,8 @@ async function handleSubmit(e) {
             username: form.username,
             email: form.email,
             password:form.password,
-            phoneNumber:String(form.phoneNumber)
+            phoneNumber:String(form.phoneNumber),
+            role:form.role
 
         })
         alert("Account created successfully! Please log in now.");
@@ -32,7 +36,13 @@ async function handleSubmit(e) {
     }
     catch (err) {
         console.log(err)
-        alert(" Signup failed");
+         if (err.response && err.response.data && err.response.data.error) {
+            alert(err.response.data.error);
+        } else if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+        } else {
+            alert("Something went wrong, try again later");
+        }
     }
 }
 return (
@@ -50,21 +60,36 @@ return (
         </div>
       </div>
       <div className='right'>
+        <h1>Local help, just a click away.</h1>
                 <form className='signupForm' onSubmit={handleSubmit}>
             <label>Username
-                <input type='text' placeholder='username' required id="S.username" name='username' value={form.username} onChange={handleChange}/>
+                
             </label>
+            <input type='text' placeholder='username' required id="S.username" name='username' value={form.username} onChange={handleChange}/>
             <label>Email
-                <input type='email' placeholder='Email' required id="S.email" name='email' value={form.email} onChange={handleChange}/>
+                
             </label>
+            <input type='email' placeholder='Email' required id="S.email" name='email' value={form.email} onChange={handleChange}/>
             <label>Password
-                <input type='password' placeholder='Password' required id="S.pass" name='password' value={form.password} onChange={handleChange}/>
+                
             </label>
+            <input type='password' placeholder='Password' required id="S.pass" name='password' value={form.password} onChange={handleChange}/>
             <label>Phone Number
-                <input type='text' placeholder='Phone Number' required maxLength={10} id="S.phone" name='phoneNumber' value={form.phoneNumber} onChange={handleChange}/>
+                
             </label>
+            <input type='text' placeholder='Phone Number' required maxLength={10} id="S.phone" name='phoneNumber' value={form.phoneNumber} onChange={handleChange}/>
+            <label>Role</label>
+            <select name ="role" value={form.role} onChange={handleChange} required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="Expert">Expert</option>
+                <option value="Client">Client</option>
+            </select>
             <button>Sign me Up</button>
         </form>
+        <p className='switch-text'>
+            Already have an account?
+            <span onClick={()=>(navigate("/login"))}>LOGIN</span>
+        </p>
          </div>
 
     </div>

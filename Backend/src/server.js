@@ -20,8 +20,8 @@ app.get("/", (req,res)=>{
 app.post("/signup", async(req,res)=>{
     const passRegex=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&) 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    let {username,email,password,phoneNumber}= req.body
-    if (!email || !username || !password || !phoneNumber || isNaN(Number(phoneNumber))){
+    let {username,email,password,phoneNumber,role}= req.body
+    if (!email || !username || !password || !phoneNumber || !role || isNaN(Number(phoneNumber))){
         return res.status(400).json({"message":"Missing credentials"})
     }
     if (!emailRegex.test(email)){
@@ -30,7 +30,7 @@ app.post("/signup", async(req,res)=>{
     if (!passRegex.test(password)){
         return res.status(403).json({"error":"Password must contain at least 8 characters, 1 letter, 1 number, and 1 special character"})
     }
-    phoneNumber=Number(phoneNumber)
+    // phoneNumber=Number(phoneNumber)
     let available = await prisma.user.findUnique({
         where:{
             email:email
@@ -45,7 +45,8 @@ app.post("/signup", async(req,res)=>{
             username:username,
             email:email,
             password:hashedPassword,
-            phoneNumber:phoneNumber
+            phoneNumber:phoneNumber,
+            role:role
 
         }
     })
@@ -84,7 +85,8 @@ app.post("/login",async(req,res)=>{
             users:{
                 id:available.id,
                 username:available.username, 
-                email:available.email
+                email:available.email,
+                role:available.role
             }
     })
 })

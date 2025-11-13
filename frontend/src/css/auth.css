@@ -1,190 +1,154 @@
+
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+ }
 .login, .signup {
   display: flex;
   height: 100vh;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
+    position: relative;
+    overflow: hidden;
   font-family: "Poppins", sans-serif;
-  overflow: hidden;
+background: linear-gradient(120deg, #007cf0, #00df9a);
+
 }
+
 .left {
   flex: 1;
-  background: url("https://www.uisort.com/blog/wp-content/uploads/2021/01/Banner.png")
-    center/cover no-repeat;
-  position: relative;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(15, 23, 42, 0.6); 
-  backdrop-filter: blur(4px);
-}
-
-.left-content {
-  position: relative;
-  z-index: 2;
-  max-width: 420px;
-  text-align: left;
-}
-
-.left-content h1 {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-  line-height: 1.3;
-  color: #fff;
-}
-
-.left-content p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  color: #f1f1f1;
-}
-
-.stats p {
-  margin: 0.4rem 0;
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: #e0e0e0;
-}
-.right {
-  flex: 1;
-  background: linear-gradient(145deg, #ffffff, #f7f9fc);
+  color: rgb(2, 2, 2);
+  padding: 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
-  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.05);
+  /* align-items: center; */
+  position: relative;
+  z-index: 1;
+
 }
 
-.right h1 {
-  font-size: 2rem;
-  color: #2d3436;
-  margin-bottom: 0.5rem;
+.left h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.left p {
+  font-size: 1.1rem;
+  max-width: 420px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.stats {
+  margin-top: 2rem;
+  font-size: 1.05rem;
+}
+
+/* Right section (form card) */
+.right {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 3rem 4rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  margin: 3rem;
+  max-width: 450px;
+  /* margin-bottom: 4rem; */
+}
+
+.right h2 {
+  font-size: 1.8rem;
+  color: #007cf0;
 }
 
 .right p {
-  color: #636e72;
-  font-size: 1rem;
-  margin-bottom: 2rem;
+  color: #555;
+  margin-bottom: 1.5rem;
 }
 
+/* Form */
 .right form {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 380px;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
 }
 
 .right label {
-  font-weight: 500;
-  margin-bottom: 0.3rem;
+  font-weight: 600;
   color: #333;
-  font-size: 0.95rem;
+  margin-top: 1rem;
 }
 
 .right input {
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  outline: none;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  transition: border 0.2s ease;
+}
+.right select {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  transition: border 0.2s ease;
 }
 
 .right input:focus {
-  border-color: #4b7bec;
-  box-shadow: 0 0 6px rgba(75, 123, 236, 0.3);
+  border-color: #00df9a;
+  outline: none;
 }
 
 .right button {
+  margin-top: 2rem;
   padding: 0.9rem;
-  background: #4b7bec;
-  color: white;
+  background: linear-gradient(to right, #00df9a, #007cf0);
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .right button:hover {
-  background: #3867d6;
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 124, 240, 0.2);
 }
 
-.right span {
-  color: #4b7bec;
-  cursor: pointer;
+/* Switch text */
+.switch-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+.switch-text span {
+  color: #007cf0;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.right span:hover {
+.switch-text span:hover {
   text-decoration: underline;
 }
 
-.right > p {
-  margin-top: 1.5rem;
-}
-@media (max-width: 992px) {
+/* Responsive */
+@media (max-width: 900px) {
   .login, .signup {
     flex-direction: column;
-    height: auto;
-  }
-
-  .left, .right {
-    width: 100%;
-    height: auto;
-  }
-
-  .left {
     padding: 2rem;
+  }
+  .left {
     text-align: center;
+    padding: 2rem;
   }
-
-  .left-content {
-    max-width: 90%;
-    margin: 0 auto;
-  }
-
   .right {
-    border-radius: 0;
-    padding: 2rem 1.5rem;
-    box-shadow: none;
-  }
-
-  .right form {
-    box-shadow: none;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .left-content h1 {
-    font-size: 1.7rem;
-  }
-
-  .left-content p {
-    font-size: 0.9rem;
-  }
-
-  .right form {
-    max-width: 90%;
+    margin: 1rem 0;
   }
 }

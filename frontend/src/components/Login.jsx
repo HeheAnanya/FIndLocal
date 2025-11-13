@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import "../css/auth.css"
 import { api } from "../api"
+import {useNavigate} from "react-router-dom"
 
 
 const Login = () => {
   const [form, setForm] = useState(
     { email: "", password: "" }
   )
-
+  const navigate = useNavigate()
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -27,7 +28,13 @@ const Login = () => {
       console.log("Profile data:", profile.data);
     } catch (err) {
       console.error("Login error:", err)
-      alert("Login failed")
+       if (err.response && err.response.data && err.response.data.error) {
+            alert(err.response.data.error);
+        } else if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+        } else {
+            alert("Something went wrong, try again later");
+        }
     }
   }
   return (
@@ -46,18 +53,23 @@ const Login = () => {
       </div>
       <div className='right'>
       <div className='login-box' >
-        <h1>Welcome to Find Local</h1>
-        <p>Connect with trusted local professionals</p>
+        <h1>Welcome Back!</h1>
+        {/* <p>Connect with trusted local professionals</p> */}
         <form classusername='loginForm' onSubmit={handleSubmit}>
           <label>Email
-            <input type='email' placeholder='Email' required name='email' value={form.email} onChange={handleChange} />
+            
           </label>
+          <input type='email' placeholder='Email' required name='email' value={form.email} onChange={handleChange} />
           <label>Password
-            <input type='password' placeholder='Password' required name='password' value={form.password} onChange={handleChange} />
+            
           </label>
+          <input type='password' placeholder='Password' required name='password' value={form.password} onChange={handleChange} />
           <button>Login</button>
           </form>
-
+          <p className='switch-text'>
+            Don't have an account?
+            <span onClick={()=>(navigate("/signup"))}>SIGN UP</span>
+          </p>
       </div>
         
 

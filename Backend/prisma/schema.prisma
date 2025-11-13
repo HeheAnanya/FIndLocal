@@ -13,13 +13,17 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+enum Role {
+  Client
+  Expert
+}
 model User {
   id   Int    @id @default(autoincrement())
   username String
   email String @unique
   password String
-  phoneNumber Int
+  phoneNumber String
+  role Role
 
 }
 
