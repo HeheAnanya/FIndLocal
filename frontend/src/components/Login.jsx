@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import "../css/login.css"
+import "../css/auth.css"
 import { api } from "../api"
+
 
 const Login = () => {
   const [form, setForm] = useState(
     { email: "", password: "" }
   )
+
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -16,18 +18,33 @@ const Login = () => {
         email: form.email,
         password: form.password
       })
-      const {user,token} = res.data
-      localStorage.setItem("user", JSON.stringify(user))
-      localStorage.setItem("token", JSON.stringify(token))
-      alert(`👋 Welcome back, ${user.username}!`)
+      const {users,token} = res.data
+      localStorage.setItem("user", JSON.stringify(users))
+      localStorage.setItem("accesstoken", JSON.stringify(token))
+      alert(`👋 Welcome back, ${users.username}!`)
+
+      const profile = await api.get("/profile");
+      console.log("Profile data:", profile.data);
     } catch (err) {
       console.error("Login error:", err)
-      if (err.response?.data?.error) alert(err.response.data.error)
-      else alert("Login failed")
+      alert("Login failed")
     }
   }
   return (
     <div className='login '>
+      <div className='left'>
+        <div className="overlay"></div>
+        <div className='left-content'>
+          <h1>Connect with trusted local professionals</h1>
+          <p>FindLocal helps you discover, book, and review skilled serviceproviders near you — fast, easy, and reliable.</p>
+          <div className="stats">
+            <p>👷‍♂️ 10,000+ Verified Experts</p>
+            <p>⭐ 5,000+ 5-Star Reviews</p>
+            <p>🏙️ 100+ Cities Served</p>
+          </div>
+        </div>
+      </div>
+      <div className='right'>
       <div className='login-box' >
         <h1>Welcome to Find Local</h1>
         <p>Connect with trusted local professionals</p>
@@ -39,7 +56,10 @@ const Login = () => {
             <input type='password' placeholder='Password' required name='password' value={form.password} onChange={handleChange} />
           </label>
           <button>Login</button>
-        </form>
+          </form>
+
+      </div>
+        
 
 
       </div>

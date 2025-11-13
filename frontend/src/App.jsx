@@ -11,16 +11,10 @@ function App() {
     <BrowserRouter>
       <div className="auth-wrapper">
         <div className="buttons">
-          <button
-            onClick={() => setShift(false)}
-            className={shift ? "" : "active"}
-          >
+          <button onClick={() => setShift(false)} className={shift ? "" : "active"}>
             SignUp
           </button>
-          <button
-            onClick={() => setShift(true)}
-            className={shift ? "active" : ""}
-          >
+          <button onClick={() => setShift(true)} className={shift ? "active" : ""}>
             Login
           </button>
         </div>

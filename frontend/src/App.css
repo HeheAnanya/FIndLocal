@@ -1,187 +1,50 @@
-body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(to bottom right, #f9fbfc, #eef2f3);
-  margin: 0;
-  padding: 0;
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Button section styling */
+.buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.signup {
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border-radius: 16px;
-  width: 400px;
-  padding: 2rem 2.5rem;
-  display: flex;
-  flex-direction: column;
   gap: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  z-index: 5;
 }
 
-.signupForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-label {
-  display: flex;
-  flex-direction: column;
-  font-weight: 600;
-  color: #2e2e2e;
-}
-
-input {
-  margin-top: 6px;
-  padding: 0.7rem 1rem;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  outline: none;
-  transition: 0.2s ease;
-}
-
-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-}
-
-button {
-  margin-top: 10px;
-  background: linear-gradient(90deg, #16a34a, #3b82f6);
+.buttons button {
+  padding: 0.6rem 1.4rem;
   border: none;
-  border-radius: 10px;
-  color: white;
-  padding: 0.9rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 6px;
+  background: #e5e9f2;
+  color: #333;
+  font-weight: 500;
   cursor: pointer;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 15px rgba(59,130,246,0.2);
-}
-/* .auth-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-} */
-
-/* .auth-card {
-  text-align: center;
-  background: #fff;
-  padding: 2rem 3rem;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  width: 420px;
-} */
-
-/* .auth-card h2 {
-  color: #16a34a;
-  font-weight: 700;
-}
-
-.auth-card p {
-  color: #6b7280;
-  margin-bottom: 1.5rem;
-}
-.auth-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: #f1f5f4;
-  gap: 25px;
-  font-family: "Inter", sans-serif;
-}
-.buttons {
-  display: flex;
-  gap: 15px;
-}
-.buttons button {
-  background: transparent;
-  border: 2px solid #28a745;
-  color: #28a745;
-  font-weight: 600;
-  padding: 8px 22px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .buttons button.active {
-  background: #28a745;
-  color: white;
+  background: #4b7bec;
+  color: #fff;
+  transform: scale(1.05);
 }
 
 .buttons button:hover {
-  transform: translateY(-2px);
+  background: #3867d6;
+  color: #fff;
 }
+
+/* Ensure auth-card (the login/signup) stays nicely below buttons */
 .auth-card {
-  animation: fadeIn 0.4s ease-in-out;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
-.auth-wrapper {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: #f1f5f4;
-  gap: 25px;
-  font-family: "Inter", sans-serif;
-}
-.buttons {
-  display: flex;
-  gap: 15px;
-}
-
-/* Buttons */
-.buttons button {
-  background: transparent;
-  border: 2px solid #28a745;
-  color: #28a745;
-  font-weight: 600;
-  padding: 8px 22px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.buttons button.active {
-  background: #28a745;
-  color: white;
-}
-
-.buttons button:hover {
-  transform: translateY(-2px);
-}
-.auth-card {
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-/* Simple fade animation when toggling forms */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  align-items: stretch;
+  flex: 1;
 }

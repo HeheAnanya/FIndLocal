@@ -16,8 +16,11 @@ datasource db {
 
 model User {
   id   Int    @id @default(autoincrement())
-  name String
-  age  Int
+  username String
+  email String @unique
+  password String
+  phoneNumber Int
+
 }
 
 model Tag {

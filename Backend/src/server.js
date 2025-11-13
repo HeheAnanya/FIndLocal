@@ -30,6 +30,7 @@ app.post("/signup", async(req,res)=>{
     if (!passRegex.test(password)){
         return res.status(403).json({"error":"Password must contain at least 8 characters, 1 letter, 1 number, and 1 special character"})
     }
+    phoneNumber=Number(phoneNumber)
     let available = await prisma.user.findUnique({
         where:{
             email:email
@@ -85,11 +86,7 @@ app.post("/login",async(req,res)=>{
                 username:available.username, 
                 email:available.email
             }
-
-        
     })
-
-
 })
 
 
