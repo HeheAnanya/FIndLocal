@@ -80,7 +80,7 @@ return (
             <input type='text' placeholder='Phone Number' required maxLength={10} id="S.phone" name='phoneNumber' value={form.phoneNumber} onChange={handleChange}/>
             <label>Role</label>
             <select name ="role" value={form.role} onChange={handleChange} required>
-                <option value="" disabled selected>Select your role</option>
+                <option value="Select" >Select your role</option>
                 <option value="Expert">Expert</option>
                 <option value="Client">Client</option>
             </select>
