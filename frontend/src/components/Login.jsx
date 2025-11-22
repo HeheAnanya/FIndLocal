@@ -23,6 +23,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(users))
       localStorage.setItem("accesstoken", JSON.stringify(token))
       alert(`👋 Welcome back, ${users.username}!`)
+      navigate("/")
 
       const profile = await api.get("/profile");
       console.log("Profile data:", profile.data);

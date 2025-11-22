@@ -48,7 +48,14 @@ app.post("/signup", async(req,res)=>{
             phoneNumber:phoneNumber,
             role:role
 
-        }
+        },
+        select: {
+        id: true,
+        username: true,
+        email: true,
+        phoneNumber: true,
+        role: true
+    }
     })
     return res.status(200).json({message:"Account created successfully", users:users})
 
