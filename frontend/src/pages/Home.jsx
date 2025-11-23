@@ -1,10 +1,12 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar' 
+import { api } from '../api'
 import '../css/home.css' 
 
 const Home = () => {
   const navigate = useNavigate()
+  const [categories, setCategories] = useState([])
     const services = [
     { name: "Plumber", icon: "🔧" },
     { name: "Electrician", icon: "💡" },
@@ -13,7 +15,18 @@ const Home = () => {
     { name: "Carpenter", icon: "🔨" },
     { name: "Pest Control", icon: "🕷️" }
   ]
-
+  useEffect(()=>{
+    async function fetching(){
+        try{
+            const res= await api.get("/categories")
+            setCategories(res.data)
+        }
+        catch(er){
+            console.log(er)
+        }
+    }
+    fetching()
+  },[])
   return (
     <div className="home-container">
       <div className="hero-section">

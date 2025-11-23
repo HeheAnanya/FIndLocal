@@ -98,6 +98,51 @@ app.post("/login",async(req,res)=>{
     })
 })
 
+app.get("/categories", async(req,res)=>{
+    try{
+        const categories = await prisma.category.findMany();
+        res.status(200).json(categories);
+    }
+    catch(er){
+        console.log(er)
+        return res.status(404).json({"message":"Can't find any available categories"})
+    }
+})
+
+app.put("/expert/profile",VerifyToken,async (req,res)=>{
+    let {bio,city,priceStart,categoryId,experience} = req.body
+    const userId = req.user.userId
+    if( !bio|| !city || !priceStart ||!categoryId || !experience){
+        return res.status(401).json("Missing Fields")
+    }
+    try{
+        await prisma.expert.upsert({
+            where:{
+                userId:userId
+            },
+            update:{
+                bio:bio,
+                city:city,
+                priceStart: priceStart,
+                categoryId: Number(categoryId)   ,
+                experience:Number(experience)             
+            },
+            create:{
+                bio: bio,
+                city: city,
+                priceStart: priceStart,
+                categoryId: Number(categoryId),
+                userId: userId,
+                experience:Number(experience)
+            }
+        })
+         return res.status(200).json({ message: "Profile updated successfully!" })
+    }
+    catch(er){
+        console.log(er)
+        return res.status(500).json({"Error":er})
+    }
+})
 
 app.get("/profile", VerifyToken,(req,res)=>{
     return res.status(200).json({message: "Access granted", user: req.user})

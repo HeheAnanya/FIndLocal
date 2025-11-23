@@ -1,23 +1,24 @@
 import React from "react";
-// import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Expert from "./components/Expert"; 
 
 function App() {
-  // const [shift, setShift] = useState(true);
-
   return (
     <BrowserRouter>
-    <Navbar/>
     <Routes>
-      <Route path="/" element={<Home/>}></Route>
-
-      <Route path="/login" element={<Login/>}></Route>
-      <Route path="/signup" element={<SignUp/>}/>
+       <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
     </Routes>
+      <Navbar /> 
+      <Routes>
+        <Route path="/" element={<Home />} /> 
+        <Route path="/expert/profile" element={<Expert />} />
+        
+      </Routes>
     </BrowserRouter>
   );
 }
