@@ -113,7 +113,7 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
         return res.status(401).json("Missing Fields")
     }
     try {
-        await prisma.expert.upsert({
+        await prisma.experts.upsert({
             where: {
                 userId: userId
             },
@@ -142,11 +142,11 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
 })
 
 app.get("/experts/:category", async (req, res) => {
-    let  service  = req.params.category
+    let  {category}  = req.params
     try {
-        const experts = await prisma.expert.findMany(
+        const experts = await prisma.experts.findMany(
             {
-                where: { category: { name: service } },
+                where: { category: { name: category } },
                 include:{user: { select: { username: true } }}
             }
         )
@@ -187,7 +187,7 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
                 id : req.user.userId
             },
             include:{
-                expert:true
+                experts:true
             }
         })
         if (!user) {
@@ -198,7 +198,7 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
         if (role==="Expert"){
             bookings = await prisma.booking.findMany({
                 where:{
-                    expertId:user.expert.id
+                    expertId:user.experts.id
                 },
                 include:{
                     client:{
@@ -213,8 +213,12 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
                     userId:user.id
                 },
                 include:{
-                    expert:{
-                        user:{select:{username:true}}
+                    experts:{
+                        include:{
+                             user:{select:{username:true}},
+                             category:true
+                        }
+                       
                     }
                 }
             })
