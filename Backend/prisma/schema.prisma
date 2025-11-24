@@ -17,6 +17,7 @@ model User {
   phoneNumber String
   role Role
   experts Expert?
+  bookings    Booking[]
 }
 model Tag {
   id   Int    @id @default(autoincrement())
@@ -39,4 +40,21 @@ model Expert{
   user        User     @relation(fields: [userId], references: [id])
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
+  bookings    Booking[]
+}
+enum STATUS {
+  COMPLETED 
+  PENDING 
+  CONFIRMED
+  REJECTED
+}
+model Booking {
+  id Int @id @default(autoincrement())
+  date DateTime
+  status STATUS @default(PENDING)
+  userId  Int
+  description String
+  client User @relation(fields: [userId], references: [id])
+  expertId    Int
+  expert Expert @relation(fields: [expertId], references: [id])
 }

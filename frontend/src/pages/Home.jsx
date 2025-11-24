@@ -44,7 +44,7 @@ const Home = () => {
         <h2>What are you looking for?</h2>
         <div className="category-grid">
           {services.map((cat, index) => (
-            <div key={index} className="category-card" onClick={() => alert(`Clicked ${cat.name}`)}>
+            <div key={index} className="category-card" onClick={() => navigate(`/services/${cat.name}`)}>
               <div className="icon">{cat.icon}</div>
               <p>{cat.name}</p>
             </div>

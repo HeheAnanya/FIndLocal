@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { api } from "../api.js"
+import "../css/expert.css"
 
 const Expert = () => {
     let [categories, setCategories] = useState([])
@@ -22,7 +23,6 @@ const Expert = () => {
         try {
             await api.put("/expert/profile", {
                 ...forms,
-                // Ensure numbers are sent as numbers, not strings
                 priceStart: Number(forms.priceStart),
                 experience: Number(forms.experience),
                 categoryId: Number(forms.categoryId)

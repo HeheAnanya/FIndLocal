@@ -5,6 +5,8 @@ import SignUp from "./components/SignUp";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Expert from "./components/Expert"; 
+import Services from "./pages/Services";
+import Bookings from "./pages/Bookings";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> 
         <Route path="/expert/profile" element={<Expert />} />
+      <Route path="/services/:type" element={<Services />} />
+      <Route path="/bookings/:expertId" element={<Bookings />} />
         
       </Routes>
     </BrowserRouter>
