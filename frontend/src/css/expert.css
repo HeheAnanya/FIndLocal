@@ -1,12 +1,151 @@
 .expert {
   min-height: 100vh;
+  background: #f4f5f7;
+  padding: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Profile View Mode - Jira Style */
+.expert .profile-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+}
+
+.expert .profile-header-banner {
+  height: 200px;
+  background: linear-gradient(135deg, #0052cc 0%, #2684ff 100%);
+  position: relative;
+}
+
+.expert .profile-content {
+  display: flex;
+  gap: 40px;
+  padding: 0 60px 60px;
+  margin-top: -80px;
+}
+
+.expert .profile-left {
+  flex: 1;
+  max-width: 500px;
+}
+
+.expert .profile-avatar-section {
+  text-align: center;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.expert .profile-avatar-section .person {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0 auto 16px;
+  display: block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+  background-size: 70%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.expert .profile-avatar-section h2 {
+  font-size: 24px;
+  color: #172b4d;
+  margin: 0 0 20px;
+  font-weight: 600;
+}
+
+.expert .manage-btn {
+  width: 100%;
+  padding: 12px 24px;
+  background: #f4f5f7;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #172b4d;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.expert .manage-btn:hover {
+  background: #ebecf0;
+}
+
+.expert .profile-section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.expert .profile-section h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e6c84;
+  letter-spacing: 0.5px;
+  margin: 0 0 20px;
+  text-transform: uppercase;
+}
+
+.expert .about-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f4f5f7;
+}
+
+.expert .about-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.expert .about-item .icon {
+  font-size: 24px;
+  width: 32px;
+  text-align: center;
+}
+
+.expert .about-item .label {
+  font-size: 12px;
+  color: #5e6c84;
+  margin-bottom: 4px;
+}
+
+.expert .about-item .value {
+  font-size: 15px;
+  color: #172b4d;
+  font-weight: 500;
+}
+
+.expert .bio-text {
+  font-size: 14px;
+  color: #172b4d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Form Mode */
+.expert .expert-form-wrapper {
+  min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 40px 20px;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .expert form {
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   background: #ffffff;
   border-radius: 20px;
@@ -169,6 +308,31 @@
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+.expert .cancel-btn {
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+  color: #2d3748;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  text-transform: uppercase;
+}
+
+.expert .cancel-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+}
+
 .expert input[name="priceStart"] {
   padding-left: 45px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23667eea'%3E%3Cpath d='M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z'/%3E%3C/svg%3E");
@@ -197,7 +361,22 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .expert form {
+  .expert .profile-content {
+    padding: 0 30px 40px;
+    margin-top: -60px;
+  }
+
+  .expert .profile-avatar-section .person {
+    width: 110px;
+    height: 110px;
+  }
+
+  .expert .profile-avatar-section h2 {
+    font-size: 20px;
+  }
+
+  .expert form,
+  .expert .profile-view {
     padding: 40px 30px;
     border-radius: 15px;
   }
@@ -220,18 +399,43 @@
     font-size: 14px;
   }
 
-  .expert button[type="submit"] {
+  .expert button[type="submit"],
+  .expert .edit-btn,
+  .expert .cancel-btn {
     padding: 14px 20px;
     font-size: 15px;
   }
 }
 
 @media (max-width: 480px) {
+  .expert .profile-header-banner {
+    height: 150px;
+  }
+
+  .expert .profile-content {
+    padding: 0 20px 30px;
+    margin-top: -50px;
+  }
+
+  .expert .profile-avatar-section {
+    padding: 20px;
+  }
+
+  .expert .profile-avatar-section .person {
+    width: 90px;
+    height: 90px;
+  }
+
+  .expert .profile-section {
+    padding: 16px;
+  }
+
   .expert {
     padding: 20px 10px;
   }
 
-  .expert form {
+  .expert form,
+  .expert .profile-view {
     padding: 30px 20px;
   }
 
@@ -254,6 +458,10 @@
 }
 
 .expert form {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.expert .profile-view {
   animation: fadeInUp 0.6s ease-out;
 }
 

@@ -3,6 +3,7 @@ import { api } from "../api"
 
 const MyBooking = () => {
     let [role, setRole] = useState("")
+    const [status, setStatus]= useState(true)
     const [bookings, setBookings] = useState([])
     useEffect(() => {
         const fetching = async () => {
@@ -22,6 +23,22 @@ const MyBooking = () => {
         fetching()
 
     }, [])
+    async function handleStatus(bookingId, newStatus){
+        try{
+            await api.put(`/bookings/${bookingId}`, {status:newStatus})
+            alert(`Booking ${newStatus}!`)
+            setBookings(bookings.map((task)=>
+            task.id===bookingId ? {...task,status:newStatus} :task
+        ))
+        }
+        catch(Er){
+            console.lpg(Er)
+            alert("Failed to update status")
+        }
+
+
+
+    }
 
     return (
         <div className='booking'>
@@ -46,8 +63,8 @@ const MyBooking = () => {
                                     <p>📝 Task: "{task.description}"</p>
                                     <p>📅 Date: {new Date(task.date).toLocaleDateString()}</p>
                                     <div className="actions">
-                                        <button className="accept-btn">Accept</button>
-                                        <button className="reject-btn">Reject</button>
+                                        <button className="accept-btn" onClick={()=>(handleStatus(task.id,"CONFIRMED"))}>Accept</button>
+                                        <button className="reject-btn" onClick={()=>(handleStatus(task.id,"REJECTED"))}>Reject</button>
                                     </div>                            
                                 </>
                             )}

@@ -113,7 +113,7 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
         return res.status(401).json("Missing Fields")
     }
     try {
-        await prisma.experts.upsert({
+        await prisma.expert.upsert({
             where: {
                 userId: userId
             },
@@ -141,10 +141,32 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
     }
 })
 
+app.get("/expert/profile", VerifyToken, async (req, res) =>{
+    try{
+        const expert = await prisma.expert.findUnique({
+            where:{
+                userId:req.user.userId
+            }
+        })
+        if (expert){
+            return res.status(200).json(expert)
+        }
+        else{
+            return res.status(200).json(null)
+        }
+
+    }
+    catch(err){
+        console.log(err)
+        return res.status(500).json({ "Error": err })
+
+    }
+})
+
 app.get("/experts/:category", async (req, res) => {
     let  {category}  = req.params
     try {
-        const experts = await prisma.experts.findMany(
+        const experts = await prisma.expert.findMany(
             {
                 where: { category: { name: category } },
                 include:{user: { select: { username: true } }}
@@ -177,6 +199,26 @@ app.post("/bookings", VerifyToken,async(req,res)=>{
     catch(er){
         console.log(er);
         res.status(500).json({ error: "Booking failed" });
+    }
+})
+
+app.put("/bookings/:id",VerifyToken, async(req,res)=>{
+    const bookingId = req.params.id
+    const {status} = req.body
+    try{
+        await prisma.booking.update({
+            where:{
+                id:Number(bookingId)
+            },
+            data:{
+                status:status
+            }
+        })
+        res.status(200).json({ message: `Booking ${status}` });
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({ error: "Failed to update booking" });
     }
 })
 
@@ -233,5 +275,34 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
 })
 app.get("/profile", VerifyToken, (req, res) => {
     return res.status(200).json({ message: "Access granted", user: req.user })
+})
+app.put("/user/change_password", VerifyToken,async(req,res)=>{
+    const {curr,latest} = req.body
+    try{
+        const user = await prisma.user.findUnique({
+            where:{
+                id:req.user.userId
+            }
+        })
+        const IsCorrectPassword = await bcrypt.compare(curr,user.password)
+        if (!IsCorrectPassword) {
+            return res.status(403).json({ error: "Incorrect old password" });
+        }
+        const newPass = await bcrypt.hash(latest,10)
+        await prisma.user.update({
+            where:{
+                id:user.id
+            },
+            data:{
+                password:newPass
+            }
+        })
+        res.status(200).json({ message: "Password updated successfully" });
+    }
+
+    catch(er){
+        console.log(er)
+        res.status(500).json({ error: er });
+    }
 })
 app.listen(3000, () => (console.log("Server is running on 3000")))

@@ -24,7 +24,7 @@ const Navbar = () => {
                     </>
                 ) : role === "Client" ? (
                     <>
-                        <button onClick={() => navigate("/my-bookings")}>My Bookings</button>
+                        <button onClick={() => navigate("/mybookings")}>My Bookings</button>
                         <button onClick={() => navigate("/profile")}>Profile</button>
                     </>
                 ) : (

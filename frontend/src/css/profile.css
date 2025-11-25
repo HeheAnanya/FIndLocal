@@ -1,0 +1,231 @@
+/* Client Profile Page - Jira Style */
+
+.profile-page {
+  min-height: 100vh;
+  background: #f4f5f7;
+  padding: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Profile View Mode - Jira Style */
+.profile-page .profile-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+}
+
+.profile-page .profile-header-banner {
+  height: 200px;
+  background: linear-gradient(135deg, #00875a 0%, #36b37e 100%);
+  position: relative;
+}
+
+.profile-page .profile-content {
+  display: flex;
+  gap: 40px;
+  padding: 0 60px 60px;
+  margin-top: -80px;
+}
+
+.profile-page .profile-left {
+  flex: 1;
+  max-width: 500px;
+}
+
+.profile-page .profile-avatar-section {
+  text-align: center;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.profile-page .profile-avatar-section .person {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0 auto 16px;
+  display: block;
+  object-fit: cover;
+}
+
+.profile-page .profile-avatar-section h2 {
+  font-size: 24px;
+  color: #172b4d;
+  margin: 0 0 20px;
+  font-weight: 600;
+}
+
+.profile-page .manage-btn {
+  width: 100%;
+  padding: 12px 24px;
+  background: #f4f5f7;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #172b4d;
+  cursor: not-allowed;
+  transition: background 0.2s;
+}
+
+.profile-page .profile-section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.profile-page .profile-section h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e6c84;
+  letter-spacing: 0.5px;
+  margin: 0 0 20px;
+  text-transform: uppercase;
+}
+
+.profile-page .about-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f4f5f7;
+}
+
+.profile-page .about-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-page .about-item .icon {
+  font-size: 24px;
+  width: 32px;
+  text-align: center;
+}
+
+.profile-page .about-item .label {
+  font-size: 12px;
+  color: #5e6c84;
+  margin-bottom: 4px;
+}
+
+.profile-page .about-item .value {
+  font-size: 15px;
+  color: #172b4d;
+  font-weight: 500;
+}
+
+/* Security Section Form */
+.profile-page .password-field {
+  margin-bottom: 16px;
+}
+
+.profile-page .password-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e6c84;
+  margin-bottom: 6px;
+}
+
+.profile-page .password-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #dfe1e6;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #172b4d;
+  background: #fafbfc;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.profile-page .password-field input:focus {
+  border-color: #0052cc;
+  background: #ffffff;
+}
+
+.profile-page .change-password-btn {
+  width: 100%;
+  padding: 12px 24px;
+  margin-top: 12px;
+  background: #0052cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-page .change-password-btn:hover {
+  background: #0747a6;
+}
+
+.profile-page .change-password-btn:active {
+  background: #003884;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-page .profile-content {
+    padding: 0 30px 40px;
+    margin-top: -60px;
+  }
+
+  .profile-page .profile-avatar-section .person {
+    width: 110px;
+    height: 110px;
+  }
+
+  .profile-page .profile-avatar-section h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page .profile-header-banner {
+    height: 150px;
+  }
+
+  .profile-page .profile-content {
+    padding: 0 20px 30px;
+    margin-top: -50px;
+  }
+
+  .profile-page .profile-avatar-section {
+    padding: 20px;
+  }
+
+  .profile-page .profile-avatar-section .person {
+    width: 90px;
+    height: 90px;
+  }
+
+  .profile-page .profile-section {
+    padding: 16px;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-page .profile-view {
+  animation: fadeIn 0.5s ease-out;
+}
