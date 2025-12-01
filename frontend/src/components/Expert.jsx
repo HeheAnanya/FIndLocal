@@ -26,7 +26,6 @@ const Expert = () => {
         try {
             await api.put("/expert/profile", {
                 ...forms,
-                // Ensure numbers are sent as numbers, not strings
                 priceStart: Number(forms.priceStart),
                 experience: Number(forms.experience),
                 categoryId: Number(forms.categoryId)
@@ -45,11 +44,8 @@ const Expert = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                // Fetch categories
                 const categoriesRes = await api.get("/categories")
                 setCategories(categoriesRes.data)
-
-                // Fetch expert profile
                 const profileRes = await api.get("/expert/profile")
                 if (profileRes.data) {
                     setHasProfile(true)

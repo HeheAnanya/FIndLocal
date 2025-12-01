@@ -141,22 +141,22 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
     }
 })
 
-app.get("/expert/profile", VerifyToken, async (req, res) =>{
-    try{
+app.get("/expert/profile", VerifyToken, async (req, res) => {
+    try {
         const expert = await prisma.expert.findUnique({
-            where:{
-                userId:req.user.userId
+            where: {
+                userId: req.user.userId
             }
         })
-        if (expert){
+        if (expert) {
             return res.status(200).json(expert)
         }
-        else{
+        else {
             return res.status(200).json(null)
         }
 
     }
-    catch(err){
+    catch (err) {
         console.log(err)
         return res.status(500).json({ "Error": err })
 
@@ -164,72 +164,111 @@ app.get("/expert/profile", VerifyToken, async (req, res) =>{
 })
 
 app.get("/experts/:category", async (req, res) => {
-    let  {category}  = req.params
+    let { category } = req.params
+    const { city, search, sort } = req.query
+    let place = {
+        category: { name: category }
+    }
+    if (city) {
+        place.city = { contains: city }
+    }
+    if (search) {
+        place.OR = [
+            { bio: { contains: search } },
+            { user: { username: { contains: search } } }
+        ];
+    }
+    let orderBy = {}
+    if (sort === "price_asc") {
+        orderBy = { priceStart: 'asc' }
+    }
+    else if (sort === "price_desc") {
+        orderBy = { priceStart: "desc" }
+    }
+    else if (sort === "rating") {
+        orderBy = { rating: "desc" }
+    }
     try {
         const experts = await prisma.expert.findMany(
             {
-                where: { category: { name: category } },
-                include:{user: { select: { username: true } }}
+                where: place,
+                orderBy: orderBy,
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                            role: true
+                        }
+                    },
+                    reviews: {
+                        take: 3, orderBy: { createdAt: 'desc' }, include: {
+                            client: { select: { username: true } }
+                        }
+                    }
+                }
             }
         )
-        res.status(200).json(experts);
+        if (experts.length === 0) {
+            return res.status(200).json({ "message": "No expert in this area" });
+        }
+        return res.status(200).json(experts);
     }
-    catch(er){
+    catch (er) {
         console.log(er);
         res.status(500).json({ error: "Could not fetch experts" });
     }
 })
 
-app.post("/bookings", VerifyToken,async(req,res)=>{
-    let {expertId,description,date} = req.body
-    expertId= Number(expertId)
-    date=new Date(date)
-    try{
+app.post("/bookings", VerifyToken, async (req, res) => {
+    let { expertId, description, date } = req.body
+    expertId = Number(expertId)
+    date = new Date(date)
+    try {
         await prisma.booking.create({
-            data:{
-                userId:req.user.userId,
-            expertId:expertId,
-            description:description,
-            date:date
+            data: {
+                userId: req.user.userId,
+                expertId: expertId,
+                description: description,
+                date: date
             }
-            
+
         })
         res.status(200).json({ message: "Booking request sent!" });
     }
-    catch(er){
+    catch (er) {
         console.log(er);
         res.status(500).json({ error: "Booking failed" });
     }
 })
 
-app.put("/bookings/:id",VerifyToken, async(req,res)=>{
+app.put("/bookings/:id", VerifyToken, async (req, res) => {
     const bookingId = req.params.id
-    const {status} = req.body
-    try{
+    const { status } = req.body
+    try {
         await prisma.booking.update({
-            where:{
-                id:Number(bookingId)
+            where: {
+                id: Number(bookingId)
             },
-            data:{
-                status:status
+            data: {
+                status: status
             }
         })
         res.status(200).json({ message: `Booking ${status}` });
     }
-    catch(err){
+    catch (err) {
         console.log(err)
         res.status(500).json({ error: "Failed to update booking" });
     }
 })
 
-app.get("/mybookings", VerifyToken,async(req,res)=>{
-    try{
+app.get("/mybookings", VerifyToken, async (req, res) => {
+    try {
         const user = await prisma.user.findUnique({
-            where:{
-                id : req.user.userId
+            where: {
+                id: req.user.userId
             },
-            include:{
-                experts:true
+            include: {
+                experts: true
             }
         })
         if (!user) {
@@ -237,30 +276,30 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
         }
         let bookings = []
         const role = user.role
-        if (role==="Expert"){
+        if (role === "Expert") {
             bookings = await prisma.booking.findMany({
-                where:{
-                    expertId:user.experts.id
+                where: {
+                    expertId: user.experts.id
                 },
-                include:{
-                    client:{
+                include: {
+                    client: {
                         select: { username: true, phoneNumber: true }
                     }
                 }
             })
         }
-        else{
+        else {
             bookings = await prisma.booking.findMany({
-                where:{
-                    userId:user.id
+                where: {
+                    userId: user.id
                 },
-                include:{
-                    experts:{
-                        include:{
-                             user:{select:{username:true}},
-                             category:true
+                include: {
+                    expert: {
+                        include: {
+                            user: { select: { username: true } },
+                            category: true
                         }
-                       
+
                     }
                 }
             })
@@ -268,41 +307,126 @@ app.get("/mybookings", VerifyToken,async(req,res)=>{
         res.status(200).json(bookings)
     }
 
-    catch(err){
+    catch (err) {
         console.log(err)
         res.status(500).json({ error: "Error fetching role" });
     }
 })
-app.get("/profile", VerifyToken, (req, res) => {
-    return res.status(200).json({ message: "Access granted", user: req.user })
-})
-app.put("/user/change_password", VerifyToken,async(req,res)=>{
-    const {curr,latest} = req.body
+app.get("/profile", VerifyToken, async(req, res) => {
     try{
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
             where:{
-                id:req.user.userId
+                id : req.user.userId
             }
         })
-        const IsCorrectPassword = await bcrypt.compare(curr,user.password)
+        return res.status(200).json({ message: "Access granted", user: user })
+    }
+    catch(er){
+        console.log(er)
+        return res.status(500).json({ "Error": err })
+    }
+    
+})
+app.put("/user/change_password", VerifyToken, async (req, res) => {
+    const { curr, latest } = req.body
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.user.userId
+            }
+        })
+        const IsCorrectPassword = await bcrypt.compare(curr, user.password)
         if (!IsCorrectPassword) {
             return res.status(403).json({ error: "Incorrect old password" });
         }
-        const newPass = await bcrypt.hash(latest,10)
+        const newPass = await bcrypt.hash(latest, 10)
         await prisma.user.update({
-            where:{
-                id:user.id
+            where: {
+                id: user.id
             },
-            data:{
-                password:newPass
+            data: {
+                password: newPass
             }
         })
         res.status(200).json({ message: "Password updated successfully" });
     }
 
-    catch(er){
+    catch (er) {
         console.log(er)
         res.status(500).json({ error: er });
     }
 })
+
+app.post("/reviews", VerifyToken, async (req, res) => {
+    const { expertId, rating, comment } = req.body
+    const clientId = req.user.userId
+    if (!expertId || !rating) {
+        return res.status(400).json({ error: "Rating and Expert ID are required" });
+    }
+    try {
+        const newReview = await prisma.review.create({
+            data: {
+                rating: Number(rating),
+                comment: comment,
+                clientId: Number(clientId),
+                expertId: Number(expertId)
+            }
+        })
+        const total_review = await prisma.review.aggregate({
+            _avg: {
+                rating: true
+            },
+            where: {
+                expertId: Number(expertId)
+            }
+        })
+        const finalRating = total_review._avg.rating || 0
+        let reviews = await prisma.expert.update({
+            where: { id: Number(expertId) },
+            data: { rating: finalRating }
+        })
+        if (reviews.length === 0) {
+            res.status(200).json({ message: "No reviews found. Be the first to write any review" });
+        }
+        res.status(200).json({ message: "Review added and rating updated!", review: newReview });
+    }
+    catch (er) {
+        console.log(er)
+        return res.status(500).json({ "error": er })
+    }
+
+})
+
+app.delete("/bookings/:id", VerifyToken, async (req, res) => {
+    let { id } = req.params
+    const userId = req.user.userId
+    try {
+        let account = await prisma.booking.findUnique({
+            where: {
+                id: Number(id)
+            }
+        })
+        if (!account) {
+            return res.status(404).json({ error: "Booking not found" })
+        }
+        if (account.userId !== userId) {
+            return res.status(403).json({ error: "Unauthorized to delete this booking" })
+        }
+        if (account.status !== "PENDING") {
+            return res.status(400).json({ error: "Cannot cancel a processed booking" })
+        }
+        await prisma.booking.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+
+        res.status(200).json({ message: "Booking cancelled successfully" })
+    }
+    catch (er) {
+        console.log(er)
+        return res.status(500).json({ error: "Failed to cancel booking" })
+    }
+})
+
 app.listen(3000, () => (console.log("Server is running on 3000")))

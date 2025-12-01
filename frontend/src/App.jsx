@@ -9,8 +9,10 @@ import Services from "./pages/Services";
 import Bookings from "./pages/Bookings";
 import MyBooking from "./pages/MyBooking";
 import Profile from "./components/Profile";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -20,12 +22,22 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/expert/profile" element={<Expert />} />
+        <Route path="/expert" element={
+          <ProtectedRoute role="Expert">
+            <Expert />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/profile" element={
+          <ProtectedRoute role="Client">
+            <Profile />
+          </ProtectedRoute>
+        } />
         <Route path="/services/:type" element={<Services />} />
         <Route path="/bookings/:expertId" element={<Bookings />} />
         <Route path="/mybookings" element={<MyBooking />} />
         <Route path="/expert/orders" element={<MyBooking />} />
-        <Route path="/profile" element={<Profile/>}/>
+
 
 
       </Routes>
