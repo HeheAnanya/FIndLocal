@@ -8,10 +8,15 @@ const { VerifyToken } = require("./src/jwtMiddleware.js")
 const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
-app.use(cors())
-app.get("/", (req, res) => {
-    return res.status(200).json("Welcome Back")
-})
+app.use(cors({
+  origin: "https://findlocal.vercel.app",
+  credentials: true
+}))
+
+// app.use(cors())
+// app.get("/", (req, res) => {
+//     return res.status(200).json("Welcome Back")
+// })
 
 app.post("/signup", async (req, res) => {
     const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&) 
