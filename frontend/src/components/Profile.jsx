@@ -194,55 +194,55 @@ const Profile = () => {
 
     return (
         <div className='expert'>
-            <div className="expert-form-wrapper" style={{maxWidth: '600px', margin: '0 auto'}}>
+            <div className="expert-form-wrapper" style={{ maxWidth: '600px', margin: '0 auto' }}>
                 <form>
                     <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>My Profile</h2>
-                    
+
                     {/* --- PERSONAL DETAILS (Read Only) --- */}
-                    <div style={{textAlign: 'center', marginBottom: '20px'}}>
-                        <img 
-                            className='person' 
-                            src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" 
-                            alt="Profile" 
-                            style={{width: '100px', height: '100px', margin: '0 auto'}}
+                    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                        <img
+                            className='person'
+                            src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png"
+                            alt="Profile"
+                            style={{ width: '100px', height: '100px', margin: '0 auto' }}
                         />
                     </div>
 
                     <label>Username:</label>
-                    <input type='text' value={userData.username} readOnly disabled style={{background: '#f0f0f0'}} />
+                    <input type='text' value={userData.username} readOnly disabled style={{ background: '#f0f0f0' }} />
 
                     <label>Email:</label>
-                    <input type='text' value={userData.email} readOnly disabled style={{background: '#f0f0f0'}} />
+                    <input type='text' value={userData.email} readOnly disabled style={{ background: '#f0f0f0' }} />
 
                     <label>Phone Number:</label>
-                    <input type='text' value={userData.phoneNumber} readOnly disabled style={{background: '#f0f0f0'}} />
+                    <input type='text' value={userData.phoneNumber} readOnly disabled style={{ background: '#f0f0f0' }} />
                 </form>
 
                 {/* --- SECURITY SECTION --- */}
-                <form onSubmit={handleUpdatePassword} style={{marginTop: '30px', borderTop: '1px solid #ddd', paddingTop: '20px'}}>
+                <form onSubmit={handleUpdatePassword} style={{ marginTop: '30px', borderTop: '1px solid #ddd', paddingTop: '20px' }}>
                     <h3>Change Password</h3>
-                    
+
                     <label>Current Password:</label>
-                    <input 
-                        type='password' 
-                        name="curr" 
+                    <input
+                        type='password'
+                        name="curr"
                         placeholder='Enter current password'
-                        value={passwords.curr} 
-                        onChange={handlePassChange} 
+                        value={passwords.curr}
+                        onChange={handlePassChange}
                         required
                     />
 
                     <label>New Password:</label>
-                    <input 
-                        type='password' 
-                        name="latest" 
+                    <input
+                        type='password'
+                        name="latest"
                         placeholder='Enter new password'
-                        value={passwords.latest} 
-                        onChange={handlePassChange} 
+                        value={passwords.latest}
+                        onChange={handlePassChange}
                         required
                     />
 
-                    <button type="submit" style={{backgroundColor: '#ff4d4d', marginTop: '10px'}}>
+                    <button type="submit" style={{ backgroundColor: '#ff4d4d', marginTop: '10px' }}>
                         Update Password
                     </button>
                 </form>

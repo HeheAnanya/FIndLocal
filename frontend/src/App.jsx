@@ -15,14 +15,16 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-      </Routes>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/expert" element={
+        {/* </Routes> */}
+
+        {/* <Routes> */}
+        <Route path="/" element={<SignUp />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/expert/profile" element={
           <ProtectedRoute role="Expert">
             <Expert />
           </ProtectedRoute>

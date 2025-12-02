@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import "../css/navbar.css"
 
 
 const Navbar = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     let [role, setRole] = useState("")
+
     useEffect(() => {
         const user = localStorage.getItem("user")
         if (user) {
@@ -13,9 +15,11 @@ const Navbar = () => {
             setRole(person.role)
         }
     }, [])
+    const isAuthPage = location.pathname === '/login' || location.pathname === '/signup'
+
     return (
-        <nav className='navbar'>
-            <div className="logo" onClick={() => navigate("/")}>FindLocal</div>
+        <nav className={`navbar ${isAuthPage ? 'navbar-hidden' : ''}`}>
+            <div className="logo" onClick={() => navigate("/home")}>FindLocal</div>
             <div className='navLink'>
                 {role === "Expert" ? (
                     <>

@@ -8,15 +8,10 @@ const { VerifyToken } = require("./src/jwtMiddleware.js")
 const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
-app.use(cors({
-  origin: "https://findlocal.vercel.app",
-  credentials: true
-}))
-
-// app.use(cors())
-// app.get("/", (req, res) => {
-//     return res.status(200).json("Welcome Back")
-// })
+app.use(cors())
+app.get("/", (req, res) => {
+    return res.status(200).json("Welcome Back")
+})
 
 app.post("/signup", async (req, res) => {
     const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&) 
@@ -170,7 +165,12 @@ app.get("/expert/profile", VerifyToken, async (req, res) => {
 
 app.get("/experts/:category", async (req, res) => {
     let { category } = req.params
-    const { city, search, sort } = req.query
+    let { city, search, sort, page = 1, limit = 6 } = req.query
+    limit = Number(limit)
+    page = Number(page)
+    let skip = (page - 1) * limit
+
+
     let place = {
         category: { name: category }
     }
@@ -198,6 +198,9 @@ app.get("/experts/:category", async (req, res) => {
             {
                 where: place,
                 orderBy: orderBy,
+                skip: skip,
+                take: limit,
+
                 include: {
                     user: {
                         select: {
@@ -214,9 +217,10 @@ app.get("/experts/:category", async (req, res) => {
             }
         )
         if (experts.length === 0) {
-            return res.status(200).json({ "message": "No expert in this area" });
+            res.status(200).json({ "message": "No expert in this area" });
         }
-        return res.status(200).json(experts);
+        const totalPages = Math.ceil(totalCount / limitNum);
+        res.status(200).json({ experts, totalPages });
     }
     catch (er) {
         console.log(er);
@@ -317,20 +321,8 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
         res.status(500).json({ error: "Error fetching role" });
     }
 })
-app.get("/profile", VerifyToken, async(req, res) => {
-    try{
-        let user = await prisma.user.findUnique({
-            where:{
-                id : req.user.userId
-            }
-        })
-        return res.status(200).json({ message: "Access granted", user: user })
-    }
-    catch(er){
-        console.log(er)
-        return res.status(500).json({ "Error": err })
-    }
-    
+app.get("/profile", VerifyToken, (req, res) => {
+    return res.status(200).json({ message: "Access granted", user: req.user })
 })
 app.put("/user/change_password", VerifyToken, async (req, res) => {
     const { curr, latest } = req.body

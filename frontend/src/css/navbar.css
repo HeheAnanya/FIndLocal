@@ -1,42 +1,67 @@
+/* Hide Navbar on specific pages */
+.navbar-hidden {
+    display: none !important;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
-    padding: 15px 50px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky; 
+    padding: 16px 64px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    height: 72px;
 }
 
 .logo {
     font-size: 24px;
-    font-weight: bold;
-    color: #333;
+    font-weight: 800;
+    color: var(--text-main);
     cursor: pointer;
-    letter-spacing: 1px;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
 }
 
 .navLink {
     display: flex;
-    gap: 20px;
+    gap: 16px;
+    align-items: center;
 }
 
 .navLink button {
     background: transparent;
     border: none;
-    font-size: 16px;
-    color: #555;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: all 0.3s ease;
+    font-size: 15px;
+    color: var(--text-main);
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    box-shadow: none;
 }
 
 .navLink button:hover {
-    background-color: #f0f0f0;
-    color: #000;
+    background-color: var(--bg-main);
+    color: var(--primary);
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Primary Action Button in Navbar (e.g. Login) */
+.navLink button:last-child {
+    background-color: var(--text-main);
+    color: white;
+}
+
+.navLink button:last-child:hover {
+    background-color: black;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .navLink button:last-child {

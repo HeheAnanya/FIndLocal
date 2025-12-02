@@ -1,89 +1,44 @@
-// import React, { useEffect, useState } from 'react'
-// import { useParams } from 'react-router-dom' 
-// import { api } from '../api'
-// // import "../css/ser,vices.css" 
-
-// const Services = () => {
-//     const { type } = useParams() 
-//     const [experts, setExperts] = useState([])
-
-//     useEffect(() => {
-//         const fetchExperts = async () => {
-//             try {
-//                 const res = await api.get(`/experts/${type}`)
-//                 setExperts(res.data)
-//             } catch (err) {
-//                 console.log(err)
-//             }
-//         }
-//         fetchExperts()
-//     }, [type])
-
-//     return (
-//         <div className="services-page">
-//             <h1>Best {type}s Near You</h1>
-            
-//             <div className="experts-list">
-//                 {experts.length === 0 ? (
-//                     <p>No experts found in this category yet.</p>
-//                 ) : (
-//                     experts.map((expert) => (
-//                         <div key={expert.id} className="expert-card">
-//                             <h3>{expert.user.username}</h3>
-//                             <p>📍 {expert.city}</p>
-//                             <p>💰 Starts at ₹{expert.priceStart}</p>
-//                             <p>⭐ Rating: {expert.rating}</p>
-//                             <button>Book Now</button>
-//                         </div>
-//                     ))
-//                 )}
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Services
-
-
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { api } from '../api'
-import "../css/expert.css" // Reusing your clean CSS
+import "../css/expert.css"
 
 const Services = () => {
-    const { type } = useParams() // e.g., "Plumber"
+    const { type } = useParams()
     const [experts, setExperts] = useState([])
-    
-    // Search States
     const [search, setSearch] = useState("")
     const [city, setCity] = useState("")
     const [sort, setSort] = useState("")
+    const [page, setPage] = useState(1);
+    const [pages, setPages] = useState(1);
 
-    // Debounce Logic (Optional but good): Only search after user stops typing
+    // async function fetching() {
+    //     let res = await api.get(`/experts/${type}?page=${page}&limit=6`);
+    //     setExperts(res.data.experts);
+    //     setPages(res.data.pages);
+    // }
     useEffect(() => {
         const fetchExperts = async () => {
             try {
-                // Build the query string dynamically
-                // e.g. /experts/Plumber?search=Mario&city=Delhi&sort=price_asc
-                const res = await api.get(`/experts/${type}?search=${search}&city=${city}&sort=${sort}`)
-                setExperts(res.data)
+                const res = await api.get(
+                    `/experts/${type}?page=${page}&limit=6&search=${search}&city=${city}&sort=${sort}`
+                );
+                setExperts(res.data.experts || []);
+                setPages(res.data.pages || 1);
             } catch (err) {
-                console.error(err)
+                console.error(err);
             }
-        }
-        
-        // Small delay to prevent too many API calls while typing
-        const timeoutId = setTimeout(() => {
-            fetchExperts()
-        }, 500)
+        };
 
-        return () => clearTimeout(timeoutId)
+        const timeout = setTimeout(() => {
+            fetchExperts();
+        }, 400);
 
-    }, [type, search, city, sort]) // Re-run whenever any filter changes
+        return () => clearTimeout(timeout);
+    }, [type, search, city, sort, page]);
 
-    // Handle Booking (Simple Navigation)
     const handleBook = (id) => {
-        window.location.href = `/book/${id}`
+        window.location.href = `/bookings/${id}`
     }
 
     return (
@@ -91,24 +46,24 @@ const Services = () => {
             <div className="expert-form-wrapper" style={{ maxWidth: '1000px' }}>
                 <h2 style={{ textAlign: 'center' }}>Best {type}s in Your Area</h2>
 
-                {/* --- FILTER BAR --- */}
+
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '30px', flexWrap: 'wrap' }}>
-                    <input 
-                        type="text" 
-                        placeholder="Search by name..." 
+                    <input
+                        type="text"
+                        placeholder="Search by name..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         style={{ flex: 1, minWidth: '200px' }}
                     />
-                    <input 
-                        type="text" 
-                        placeholder="Filter by City (e.g. Delhi)" 
+                    <input
+                        type="text"
+                        placeholder="Filter by City (e.g. Delhi)"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         style={{ flex: 1, minWidth: '200px' }}
                     />
-                    <select 
-                        value={sort} 
+                    <select
+                        value={sort}
                         onChange={(e) => setSort(e.target.value)}
                         style={{ flex: 0.5, minWidth: '150px' }}
                     >
@@ -119,16 +74,15 @@ const Services = () => {
                     </select>
                 </div>
 
-                {/* --- EXPERTS GRID --- */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                     {experts.length === 0 ? (
                         <p style={{ gridColumn: '1/-1', textAlign: 'center' }}>No experts found matching your criteria.</p>
                     ) : (
                         experts.map((expert) => (
-                            <div key={expert.id} style={{ 
-                                border: '1px solid #e2e8f0', 
-                                borderRadius: '12px', 
-                                padding: '20px', 
+                            <div key={expert.id} style={{
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '12px',
+                                padding: '20px',
                                 background: 'white',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                             }}>
@@ -138,26 +92,34 @@ const Services = () => {
                                         ★ {expert.rating || "New"}
                                     </span>
                                 </div>
-                                
+
                                 <p style={{ color: '#64748b', fontSize: '14px', margin: '5px 0' }}>📍 {expert.city}</p>
                                 <p style={{ color: '#64748b', fontSize: '14px', margin: '5px 0' }}>💼 {expert.experience} Years Exp.</p>
                                 <p style={{ fontWeight: 'bold', color: '#2563eb', margin: '10px 0' }}>Starts at ₹{expert.priceStart}</p>
-                                
+
                                 <p style={{ fontSize: '13px', color: '#64748b', fontStyle: 'italic', marginBottom: '15px' }}>
-                                    "{expert.bio.substring(0, 60)}..."
+                                    "{expert.bio.substring(0, 60) || "No bio available"}..."
                                 </p>
 
-                                <button 
+                                <button
                                     onClick={() => handleBook(expert.id)}
                                     style={{ width: '100%', background: '#2563eb', color: 'white', padding: '10px', borderRadius: '8px', border: 'none', fontWeight: '600' }}
                                 >
                                     Book Now
                                 </button>
+
                             </div>
                         ))
                     )}
                 </div>
+                <div className="pagination">
+                    <button disabled={page <= 1} onClick={() => setPage(page - 1)}>Prev</button>
+                    <span>{page} / {pages}</span>
+                    <button disabled={page >= pages} onClick={() => setPage(page + 1)}>Next</button>
+                </div>
             </div>
+
+
         </div>
     )
 }

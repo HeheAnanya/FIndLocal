@@ -29,76 +29,76 @@ const Login = () => {
           const expertProfile = await api.get("/expert/profile")
 
           if (expertProfile.data) {
-            navigate("/expert")
+            navigate("/expert/profile")
           } else {
 
-            navigate("/expert")
+            navigate("/expert/profile")
           }
         } catch (e) {
           console.log(e)
           navigate("/expert")
-        } 
-
-        // const profile = await api.get("/profile");
-        // console.log("Profile data:", profile.data);
+        }
       }
       else {
 
-          navigate("/profile")
-        }
-       } catch (err) {
-        console.error("Login error:", err)
-        if (err.response && err.response.data && err.response.data.error) {
-          alert(err.response.data.error);
-        } else if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
-        } else {
-          alert("Something went wrong, try again later");
-        }
+        navigate("/profile")
       }
-
+    } catch (err) {
+      console.error("Login error:", err)
+      if (err.response && err.response.data && err.response.data.error) {
+        alert(err.response.data.error);
+      } else if (err.response && err.response.data && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Something went wrong, try again later");
+      }
     }
 
-  return (
-      <div className='login '>
-        <div className='left'>
-          <div className="overlay"></div>
-          <div className='left-content'>
-            <h1>Connect with trusted local professionals</h1>
-            <p>FindLocal helps you discover, book, and review skilled serviceproviders near you — fast, easy, and reliable.</p>
-            <div className="stats">
-              <p>👷‍♂️ 10,000+ Verified Experts</p>
-              <p>⭐ 5,000+ 5-Star Reviews</p>
-              <p>🏙️ 100+ Cities Served</p>
-            </div>
-          </div>
-        </div>
-        <div className='right'>
-          <div className='login-box' >
-            <h1>Welcome Back!</h1>
-            {/* <p>Connect with trusted local professionals</p> */}
-            <form classusername='loginForm' onSubmit={handleSubmit}>
-              <label>Email
-
-              </label>
-              <input type='email' placeholder='Email' required name='email' value={form.email} onChange={handleChange} />
-              <label>Password
-
-              </label>
-              <input type='password' placeholder='Password' required name='password' value={form.password} onChange={handleChange} />
-              <button>Login</button>
-            </form>
-            <p className='switch-text'>
-              Don't have an account?
-              <span onClick={() => (navigate("/signup"))}>SIGN UP</span>
-            </p>
-          </div>
-
-
-
-        </div>
-      </div>
-    )
   }
 
-  export default Login
+  return (
+    <div className='auth-container'>
+      <div className='auth-card'>
+        <div className="auth-header">
+          <h1>Welcome Back</h1>
+          <p>Login to continue managing your bookings</p>
+        </div>
+
+        <form className='auth-form' onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type='email'
+              placeholder='Enter your email'
+              required
+              name='email'
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type='password'
+              placeholder='Enter your password'
+              required
+              name='password'
+              value={form.password}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button type="submit" className="auth-btn">Login</button>
+        </form>
+
+        <p className='switch-text'>
+          Don't have an account?
+          <span onClick={() => navigate("/signup")}>Sign Up</span>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default Login
