@@ -16,10 +16,18 @@ const Navbar = () => {
         }
     }, [])
     const isAuthPage = location.pathname === '/login' || location.pathname === '/signup'
+    const viewer = JSON.parse(localStorage.getItem("user") || "{}");
+
 
     return (
         <nav className={`navbar ${isAuthPage ? 'navbar-hidden' : ''}`}>
-            <div className="logo" onClick={() => navigate("/home")}>FindLocal</div>
+            <div className="logo" onClick={() => {
+                if (role==="Expert"){
+                    navigate("/expert/dashboard")
+                }
+                else if (role === "Client") navigate("/home")
+                else navigate("/signup")
+            }}>FindLocal</div>
             <div className='navLink'>
                 {role === "Expert" ? (
                     <>

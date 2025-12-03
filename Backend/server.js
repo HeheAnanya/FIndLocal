@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const cors = require("cors")
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { VerifyToken } = require("./src/jwtMiddleware.js")
+const { VerifyToken } = require("./src/jwtMiddleware.js");
 const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
@@ -288,6 +288,12 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
         let bookings = []
         const role = user.role
         if (role === "Expert") {
+            if (!user.experts || !user.experts.id) {
+                return res.status(200).json({
+                    bookings: [],
+                    stats: { total: 0, upcoming: 0, completed: 0 }
+                });
+            }
             bookings = await prisma.booking.findMany({
                 where: {
                     expertId: user.experts.id
@@ -295,8 +301,10 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                 include: {
                     client: {
                         select: { username: true, phoneNumber: true }
-                    }
-                }
+                    },
+                    reviews: true
+                },
+
             })
         }
         else {
@@ -309,13 +317,25 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                         include: {
                             user: { select: { username: true } },
                             category: true
-                        }
+                        },
+                        reviews: true
 
-                    }
+                    },
+                    // reviews:{
+                    //     where:{clientId:user.id},
+                    //     select:{id: true, rating: true, comment: true}
+                    // }
                 }
             })
         }
-        res.status(200).json(bookings)
+        res.status(200).json({
+            bookings,
+            stats: {
+                total: bookings.length,
+                upcoming: bookings.filter(b => b.status === "CONFIRMED").length,
+                completed: bookings.filter(b => b.status === "COMPLETED").length
+            }
+        })
     }
 
     catch (err) {
@@ -428,4 +448,76 @@ app.delete("/bookings/:id", VerifyToken, async (req, res) => {
     }
 })
 
+app.delete("/reviews/:id", VerifyToken, async (req, res) => {
+    let reviewId = (req.params.id)
+    reviewId = Number(reviewId)
+    const userId = req.user.userId
+    try {
+        const review = await prisma.review.findUnique({
+            where: {
+                id: reviewId
+            }
+        })
+        if (!review) {
+            return res.status(404).json({ error: "Review not found" });
+        }
+        if (review.clientId !== userId) {
+            return res.status(403).json({ error: "Unauthorized to delete this review" })
+        }
+        await prisma.review.delete({
+            where: {
+                id: reviewId
+            }
+        })
+        const total_review = await prisma.review.aggregate({
+            _avg: { rating: true },
+            where: { expertId: review.expertId }
+        });
+        const finalRating = total_review._avg.rating || 0;
+        await prisma.expert.update({
+            where: { id: review.expertId },
+            data: { rating: finalRating }
+        })
+        return res.status(200).json({ "Message": "Review Deleted Successfully" })
+
+    }
+
+    catch (er) {
+        console.log(er)
+        return res.status(500).json({ error: er })
+    }
+})
+app.get("/myreviews", VerifyToken, async (req, res) => {
+    let { userId } = req.query
+    userId = Number(userId)
+    try {
+        const review = await prisma.review.findMany({
+            where: {
+                clientId: userId
+            },
+            include: {
+                expert: {
+                    include: {
+                        user: {
+                            select: {
+                                username: true
+                            }
+                        },
+                        category: {
+                            select: { name: true }
+                        }
+                    }
+                }
+            },
+            orderBy: { createdAt: "desc" }
+        })
+        return res.status(200).json(reviews);
+    }
+
+    catch (er) {
+        console.log(er)
+        return res.status(500).json(er)
+    }
+
+})
 app.listen(3000, () => (console.log("Server is running on 3000")))

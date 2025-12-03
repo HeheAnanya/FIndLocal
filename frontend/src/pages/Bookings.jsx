@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { api } from "../api"
+import "../css/BookForm.css"
 
 const Bookings = () => {
     const { expertId } = useParams()
@@ -32,14 +33,14 @@ const Bookings = () => {
         })
     }
     return (
-        <div>
-            <h2>Book the Expert</h2>
-            <form onSubmit={handleSubmit}>
+        <div className='formContainer'>
+            <h2 className='title'>Book the Expert</h2>
+            <form onSubmit={handleSubmit} className='bookForm'>
                 <label>Task</label>
-                <textarea placeholder='Describe the task...' required name='description' onChange={handleChange}></textarea>
+                <textarea placeholder='Describe the task...' required name='description' onChange={handleChange} className='booking-textarea'></textarea>
                 <label>Book your Slot</label>
-                <input type={'datetime-local'} value={forms.date} name='date' onChange={handleChange}></input>
-                <button>Book</button>
+                <input type={'datetime-local'} value={forms.date} name='date' onChange={handleChange} className='booking-input'></input>
+                <button className='booking-btn'>Book</button>
 
             </form>
         </div>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { api } from "../api"
+import "../css/bookings.css"
+
 
 const MyBooking = () => {
     const [role, setRole] = useState("")
@@ -16,8 +18,14 @@ const MyBooking = () => {
                 setRole(person.role)
             }
             try {
+                
                 let res = await api.get("/mybookings")
-                setBookings(res.data)
+                setBookings(res.data.bookings.map((b)=>(
+                    {
+                        ...b,
+                        review: b.reviews?.length ? b.reviews[0] : null
+                    }
+                )))
             } catch (er) {
                 console.log(er)
             }
@@ -80,6 +88,18 @@ const MyBooking = () => {
             alert("Failed to submit review")
         }
     }
+    async function deleteReview(reviewId) {
+        try {
+            await api.delete(`/reviews/${reviewId}`)
+            alert("Review Deleted Successfully")
+        }
+        catch (er) {
+            alert(er.response?.data?.error || "Can't Delete the Review, Please try again later")
+            console.log(er)
+        }
+
+
+    }
 
     return (
         <div className='booking'>
@@ -90,7 +110,7 @@ const MyBooking = () => {
                 ) : (
                     bookings.map((task) => (
                         <div key={task.id} className="card"
-                             style={{ border: '1px solid #ddd', padding: '15px', margin: '10px', borderRadius: '8px', background: 'white' }}>
+                            style={{ border: '1px solid #ddd', padding: '15px', margin: '10px', borderRadius: '8px', background: 'white' }}>
 
                             {/* CLIENT UI */}
                             {role === "Client" && (
@@ -127,21 +147,33 @@ const MyBooking = () => {
 
                                             {reviewingId === task.id && (
                                                 <form onSubmit={(e) => submitReview(e, task.expertId)}
-                                                      style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+                                                    style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
                                                     <input type="number" placeholder="Rating (1-5)" min="1" max="5" required
-                                                           value={reviewData.rating}
-                                                           onChange={(e) => setReviewData({ ...reviewData, rating: e.target.value })}
-                                                           style={{ width: '80px', padding: '5px' }} />
+                                                        value={reviewData.rating}
+                                                        onChange={(e) => setReviewData({ ...reviewData, rating: e.target.value })}
+                                                        style={{ width: '80px', padding: '5px' }} />
                                                     <input type="text" placeholder="Write a comment..." required
-                                                           value={reviewData.comment}
-                                                           onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
-                                                           style={{ flex: 1, padding: '5px' }} />
+                                                        value={reviewData.comment}
+                                                        onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+                                                        style={{ flex: 1, padding: '5px' }} />
                                                     <button type="submit"
-                                                            style={{ backgroundColor: '#007bff', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}>
+                                                        style={{ backgroundColor: '#007bff', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}>
                                                         Submit
                                                     </button>
                                                 </form>
                                             )}
+                                        </div>
+                                    )}
+                                    {task.review && (
+                                        <div className='review'>
+                                            <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                                                ⭐ {task.review.rating} / 5
+                                                <br />
+                                                "{task.review.comment}"
+                                            </p>
+                                            <button onClick={()=>deleteReview(task.review.id)} style={{ backgroundColor: '#333', color: 'white', border: 'none', padding: '8px 12px', marginTop: '10px', borderRadius: '5px', cursor: 'pointer' }}
+                                                >Delete Review</button>
+
                                         </div>
                                     )}
 
