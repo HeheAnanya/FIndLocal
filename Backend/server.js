@@ -9,7 +9,9 @@ const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
 app.use(cors({
-  origin: "https://f-ind-local.vercel.app",
+  origin:[ "https://f-ind-local.vercel.app",
+  "https://f-ind-local.vercel.app/",
+    "http://localhost:5173"],
   credentials: true,
 }))
 app.get("/", (req, res) => {
