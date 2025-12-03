@@ -193,6 +193,8 @@ app.get("/experts/:category", async (req, res) => {
     else if (sort === "rating") {
         orderBy = { rating: "desc" }
     }
+    const totalCount = await prisma.expert.count({ where: place });
+
     try {
         const experts = await prisma.expert.findMany(
             {
@@ -217,14 +219,14 @@ app.get("/experts/:category", async (req, res) => {
             }
         )
         if (experts.length === 0) {
-            res.status(200).json({ "message": "No expert in this area" });
+            return res.status(200).json({ "message": "No expert in this area" });
         }
-        const totalPages = Math.ceil(totalCount / limitNum);
-        res.status(200).json({ experts, totalPages });
+        const totalPages = Math.ceil(totalCount / limit);
+        return res.status(200).json({ experts, totalPages });
     }
     catch (er) {
         console.log(er);
-        res.status(500).json({ error: "Could not fetch experts" });
+        return res.status(500).json({ error: "Could not fetch experts" });
     }
 })
 
