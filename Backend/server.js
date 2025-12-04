@@ -536,37 +536,37 @@ app.delete("/reviews/:id", VerifyToken, async (req, res) => {
         return res.status(500).json({ error: er })
     }
 })
-app.get("/myreviews", VerifyToken, async (req, res) => {
-    let { userId } = req.query
-    userId = Number(userId)
-    try {
-        const review = await prisma.review.findMany({
-            where: {
-                clientId: userId
-            },
-            include: {
-                expert: {
-                    include: {
-                        user: {
-                            select: {
-                                username: true
-                            }
-                        },
-                        category: {
-                            select: { name: true }
-                        }
-                    }
-                }
-            },
-            orderBy: { createdAt: "desc" }
-        })
-        return res.status(200).json(review);
-    }
+// app.get("/myreviews", VerifyToken, async (req, res) => {
+//     let { userId } = req.query
+//     userId = Number(userId)
+//     try {
+//         const review = await prisma.review.findMany({
+//             where: {
+//                 clientId: userId
+//             },
+//             include: {
+//                 expert: {
+//                     include: {
+//                         user: {
+//                             select: {
+//                                 username: true
+//                             }
+//                         },
+//                         category: {
+//                             select: { name: true }
+//                         }
+//                     }
+//                 }
+//             },
+//             orderBy: { createdAt: "desc" }
+//         })
+//         return res.status(200).json(review);
+//     }
 
-    catch (er) {
-        console.log(er)
-        return res.status(500).json(er)
-    }
+//     catch (er) {
+//         console.log(er)
+//         return res.status(500).json(er)
+//     }
 
-})
+// })
 app.listen(3000, () => (console.log("Server is running on 3000")))
