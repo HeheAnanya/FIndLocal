@@ -10,34 +10,30 @@ const MyBooking = () => {
     const [reviewData, setReviewData] = useState({ rating: "", comment: "" })
     const [reviewingId, setReviewingId] = useState(null)
 
-    useEffect(() => {
-        const fetching = async () => {
-            const user = localStorage.getItem("user")
-            if (user) {
-                const person = JSON.parse(user)
-                setRole(person.role)
-            }
-            try {
-
-                let res = await api.get("/mybookings")
-
-                if (!res.data || !Array.isArray(res.data.bookings)) {
-                    setBookings([])
-                    return
-                }
-
-                setBookings(
-                    res.data.bookings.map((b) => ({
-                        ...b,
-                        review: Array.isArray(b.reviews) && b.reviews.length ? b.reviews[0] : null
-                    }))
-                )
-            } catch (er) {
-                console.log(er)
-            }
+   useEffect(() => {
+    const fetching = async () => {
+        const user = localStorage.getItem("user");
+        if (user) {
+            const person = JSON.parse(user);
+            setRole(person.role);
         }
-        fetching()
-    }, [])
+
+        try {
+            let res = await api.get("/mybookings");
+
+            if (!res.data || !Array.isArray(res.data.bookings)) {
+                setBookings([]);
+                return;
+            }
+            setBookings(res.data.bookings);
+
+        } catch (er) {
+            console.log(er);
+        }
+    };
+
+    fetching();
+}, []);
 
     async function handleStatus(bookingId, newStatus) {
         try {
