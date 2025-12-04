@@ -78,7 +78,7 @@ const Expert = () => {
                     <div className="profile-content">
                         <div className="profile-left">
                             <div className="profile-avatar-section">
-                                <img className='person' alt="Profile" />
+                                <img className='person' alt="Profile" src='https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg'/>
                                 <h2>{categories.find(cat => cat.id === profileData?.categoryId)?.name || 'Expert'}</h2>
                                 <button className="manage-btn" onClick={() => setIsEditing(true)}>
                                     Manage your account
@@ -128,7 +128,7 @@ const Expert = () => {
                 // Edit Form Mode
                 <div className="expert-form-wrapper">
                     <form onSubmit={handleSubmit}>
-                        <img className='person' alt="Profile" />
+                        <img className='person' alt="Profile" src='https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg'/>
                         <label>Bio:</label>
                         <textarea placeholder='Write something about you' value={forms.bio} name="bio" onChange={handleChange} />
                         <label> City:</label>

@@ -71,7 +71,7 @@ const Profile = () => {
                     <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                         <img
                             className='person'
-                            src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png"
+                            src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"
                             alt="Profile"
                             style={{ width: '100px', height: '100px', margin: '0 auto' }}
                         />
