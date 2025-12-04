@@ -326,12 +326,13 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                     expert: {
                         include: {
                             user: { select: { username: true } },
-                            category: true
+                            category: true,
+                            reviews:true
                         },
                         
 
                     },
-                    reviews: true
+                    // reviews: true
                     // reviews:{
                     //     where:{clientId:user.id},
                     //     select:{id: true, rating: true, comment: true}
