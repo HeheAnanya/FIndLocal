@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams,useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import "../css/expert.css"
 
 const Services = () => {
     const { type } = useParams()
+    const navigate = useNavigate()
     const [experts, setExperts] = useState([])
     const [search, setSearch] = useState("")
     const [city, setCity] = useState("")
@@ -38,7 +39,7 @@ const Services = () => {
     }, [type, search, city, sort, page]);
 
     const handleBook = (id) => {
-        window.location.href = `/bookings/${id}`
+        navigate(`/bookings/${id}`)
     }
 
     return (
