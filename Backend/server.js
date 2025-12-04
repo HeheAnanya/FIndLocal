@@ -5,6 +5,7 @@ const cors = require("cors")
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { VerifyToken } = require("./src/jwtMiddleware.js");
+const e = require("express");
 const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
@@ -382,6 +383,38 @@ app.put("/user/change_password", VerifyToken, async (req, res) => {
     catch (er) {
         console.log(er)
         res.status(500).json({ error: er });
+    }
+})
+app.put("/user/update",VerifyToken,async (req,res)=>{
+    
+        let { username, email, phoneNumber } = req.body
+        if (!username|| !email || !phoneNumber){
+            return res.status(400).json({"Message":"Missing Credentials"})
+        }
+try{
+    const updated = await prisma.user.update({
+        where:{
+            id:req.user.userId
+        },
+        data:{
+            username:username,
+            phoneNumber:Number(phoneNumber),
+            email:email
+        },
+        select: {
+                id: true,
+                username: true,
+                email: true,
+                phoneNumber: true
+            }
+    })
+    return res.status(200).json({"Message":"Profile Updated Successfully",
+        user:updated
+    })
+    }
+    catch(er){
+        console.log(er)
+        return res.status(500).json({error:er})
     }
 })
 
