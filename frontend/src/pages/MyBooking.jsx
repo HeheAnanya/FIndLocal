@@ -20,19 +20,13 @@ const MyBooking = () => {
             try {
                 
                 let res = await api.get("/mybookings")
-                setBookings(
-    res.data.bookings.map((b) => ({
-        ...b,
-        review: b.expert?.reviews?.length ? b.expert.reviews[0] : null
-    }))
-)
-
-                // setBookings(res.data.bookings.map((b)=>(
-                //     {
-                //         ...b,
-                //         review: b.reviews?.length ? b.reviews[0] : null
-                //     }
-                // )))
+                
+                setBookings(res.data.bookings.map((b)=>(
+                    {
+                        ...b,
+                        review: b.reviews?.length ? b.reviews[0] : null
+                    }
+                )))
             } catch (er) {
                 console.log(er)
             }
