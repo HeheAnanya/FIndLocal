@@ -285,43 +285,29 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: req.user.userId },
-            include: {
-                experts: true
-            }
+            include: { experts: true }
         });
 
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
+        if (!user) return res.status(404).json({ error: "User not found" });
 
         let bookings = [];
+
         if (user.role === "Expert") {
-
-            if (!user.experts || !user.experts.id) {
-                return res.status(200).json({
-                    bookings: [],
-                    stats: { total: 0, upcoming: 0, completed: 0 }
-                });
-            }
-
             bookings = await prisma.booking.findMany({
-                where: { expertId: user.experts.id },
+                where: { expertId: user.experts?.id },
                 include: {
-                    client: {
-                        select: { username: true, phoneNumber: true }
-                    },
+                    client: { select: { username: true, phoneNumber: true } },
                     expert: {
                         include: {
                             user: { select: { username: true } },
                             category: true
                         }
-                    },
-                    reviews: true 
+                    }
                 },
                 orderBy: { date: "desc" }
             });
-        }
-        else {
+
+        } else {
             bookings = await prisma.booking.findMany({
                 where: { userId: user.id },
                 include: {
@@ -330,33 +316,20 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                             user: { select: { username: true } },
                             category: true
                         }
-                    },
-                    reviews: {
-                        where: { clientId: user.id },  
-                        select: {
-                            id: true,
-                            rating: true,
-                            comment: true
-                        }
                     }
                 },
                 orderBy: { date: "desc" }
             });
         }
-        res.json({
-            bookings,
-            stats: {
-                total: bookings.length,
-                upcoming: bookings.filter(b => b.status === "CONFIRMED").length,
-                completed: bookings.filter(b => b.status === "COMPLETED").length
-            }
-        });
 
-    } catch (err) {
+        return res.json({ bookings });
+    }
+    catch (err) {
         console.log(err);
         res.status(500).json({ error: "Error fetching bookings" });
     }
 });
+
 
 
 
