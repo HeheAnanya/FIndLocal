@@ -558,7 +558,7 @@ app.get("/myreviews", VerifyToken, async (req, res) => {
             },
             orderBy: { createdAt: "desc" }
         })
-        return res.status(200).json(reviews);
+        return res.status(200).json(review);
     }
 
     catch (er) {

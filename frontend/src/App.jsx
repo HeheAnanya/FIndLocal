@@ -11,6 +11,7 @@ import MyBooking from "./pages/MyBooking";
 import Profile from "./components/Profile";
 import ProtectedRoute from "./ProtectedRoute";
 import ExpertDashboard from "./pages/Expert";   
+import MyReviews from "./pages/MyReviews"
 
 function Layout({ children }) {
   const location = useLocation();
