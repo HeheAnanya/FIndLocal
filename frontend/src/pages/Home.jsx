@@ -31,14 +31,14 @@ const Home = () => {
     <div className="home-container">
       <div className="hero-section">
         <h1>Find the right professional for you</h1>
-        <div className="search-bar-container">
+        {/* <div className="search-bar-container">
           <input 
             type="text" 
             placeholder="Search for 'Plumber', 'Electrician'..." 
             className="main-search"
           />
           <button className="search-btn">Search</button>
-        </div>
+        </div> */}
       </div>
       <div className="services-section">
         <h2>What are you looking for?</h2>
