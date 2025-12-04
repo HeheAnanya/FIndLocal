@@ -18,14 +18,20 @@ const MyBooking = () => {
                 setRole(person.role)
             }
             try {
-                
+
                 let res = await api.get("/mybookings")
-                setBookings(res.data.bookings.map((b)=>(
-                    {
+
+                if (!res.data || !Array.isArray(res.data.bookings)) {
+                    setBookings([])
+                    return
+                }
+
+                setBookings(
+                    res.data.bookings.map((b) => ({
                         ...b,
-                        review: b.reviews?.length ? b.reviews[0] : null
-                    }
-                )))
+                        review: Array.isArray(b.reviews) && b.reviews.length ? b.reviews[0] : null
+                    }))
+                )
             } catch (er) {
                 console.log(er)
             }
@@ -171,8 +177,8 @@ const MyBooking = () => {
                                                 <br />
                                                 "{task.review.comment}"
                                             </p>
-                                            <button onClick={()=>deleteReview(task.review.id)} style={{ backgroundColor: '#333', color: 'white', border: 'none', padding: '8px 12px', marginTop: '10px', borderRadius: '5px', cursor: 'pointer' }}
-                                                >Delete Review</button>
+                                            <button onClick={() => deleteReview(task.review.id)} style={{ backgroundColor: '#333', color: 'white', border: 'none', padding: '8px 12px', marginTop: '10px', borderRadius: '5px', cursor: 'pointer' }}
+                                            >Delete Review</button>
 
                                         </div>
                                     )}

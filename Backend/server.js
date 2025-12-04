@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(cors({
   origin: [
     "https://f-ind-local.vercel.app",
-   " https://findlocal.vercel.app",
+   "https://findlocal.vercel.app",
     "http://localhost:5174"
   ],
   credentials: true,
@@ -425,68 +425,45 @@ try{
     }
 })
 
-// app.post("/reviews", VerifyToken, async (req, res) => {
-//     const { expertId, rating, comment } = req.body
-//     const clientId = req.user.userId
-//     if (!expertId || !rating) {
-//         return res.status(400).json({ error: "Rating and Expert ID are required" });
-//     }
-//     try {
-//         const newReview = await prisma.review.create({
-//             data: {
-//                 rating: Number(rating),
-//                 comment: comment,
-//                 clientId: Number(clientId),
-//                 expertId: Number(expertId)
-//             }
-//         })
-//         const total_review = await prisma.review.aggregate({
-//             _avg: {
-//                 rating: true
-//             },
-//             where: {
-//                 expertId: Number(expertId)
-//             }
-//         })
-//         const finalRating = total_review._avg.rating || 0
-//         let reviews = await prisma.expert.update({
-//             where: { id: Number(expertId) },
-//             data: { rating: finalRating }
-//         })
-//         if (reviews.length === 0) {
-//             res.status(200).json({ message: "No reviews found. Be the first to write any review" });
-//         }
-//         res.status(200).json({ message: "Review added and rating updated!", review: newReview });
-//     }
-//     catch (er) {
-//         console.log(er)
-//         return res.status(500).json({ "error": er })
-//     }
-
-// })
-app.get("/myreviews", VerifyToken, async (req, res) => {
-    const userId = Number(req.user.userId);
-
-    try {
-        const review = await prisma.review.findMany({
-            where: { clientId: userId },
-            include: {
-                expert: {
-                    include: {
-                        user: { select: { username: true } },
-                        category: { select: { name: true } }
-                    }
-                }
-            },
-            orderBy: { createdAt: "desc" }
-        });
-
-        return res.status(200).json(review);
-    } catch (er) {
-        console.log(er);
-        return res.status(500).json(er);
+app.post("/reviews", VerifyToken, async (req, res) => {
+    const { expertId, rating, comment } = req.body
+    const clientId = req.user.userId
+    if (!expertId || !rating) {
+        return res.status(400).json({ error: "Rating and Expert ID are required" });
     }
-});
+    try {
+        const newReview = await prisma.review.create({
+            data: {
+                rating: Number(rating),
+                comment: comment,
+                clientId: Number(clientId),
+                expertId: Number(expertId)
+            }
+        })
+        const total_review = await prisma.review.aggregate({
+            _avg: {
+                rating: true
+            },
+            where: {
+                expertId: Number(expertId)
+            }
+        })
+        const finalRating = total_review._avg.rating || 0
+        let reviews = await prisma.expert.update({
+            where: { id: Number(expertId) },
+            data: { rating: finalRating }
+        })
+        if (reviews.length === 0) {
+            res.status(200).json({ message: "No reviews found. Be the first to write any review" });
+        }
+        res.status(200).json({ message: "Review added and rating updated!", review: newReview });
+    }
+    catch (er) {
+        console.log(er)
+        return res.status(500).json({ "error": er })
+    }
+
+})
 
 app.delete("/bookings/:id", VerifyToken, async (req, res) => {
     let { id } = req.params
