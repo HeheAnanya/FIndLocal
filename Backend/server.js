@@ -398,7 +398,7 @@ try{
         },
         data:{
             username:username,
-            phoneNumber:Number(phoneNumber),
+            phoneNumber:phoneNumber,
             email:email
         },
         select: {
