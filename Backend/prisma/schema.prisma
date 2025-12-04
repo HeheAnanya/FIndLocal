@@ -1,179 +1,179 @@
-// generator client {
-//   provider = "prisma-client-js"
-// }
+  // generator client {
+  //   provider = "prisma-client-js"
+  // }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
+  // datasource db {
+  //   provider = "postgresql"
+  //   url      = env("DATABASE_URL")
+  // }
 
-// enum Role {
-//   Client
-//   Expert
-// }
-// enum STATUS {
-//   COMPLETED
-//   PENDINGnpx
-//   CONFIRMED
-//   REJECTED
-// }
+  // enum Role {
+  //   Client
+  //   Expert
+  // }
+  // enum STATUS {
+  //   COMPLETED
+  //   PENDINGnpx
+  //   CONFIRMED
+  //   REJECTED
+  // }
 
-// model User {
-//   id          Int       @id @default(autoincrement())
-//   username    String
-//   email       String    @unique
-//   password    String
-//   phoneNumber String
-//   role        Role
-//   experts     Expert?
-//   bookings    Booking[]
-//   reviews     Review[]
-// }
+  // model User {
+  //   id          Int       @id @default(autoincrement())
+  //   username    String
+  //   email       String    @unique
+  //   password    String
+  //   phoneNumber String
+  //   role        Role
+  //   experts     Expert?
+  //   bookings    Booking[]
+  //   reviews     Review[]
+  // }
 
-// model Tag {
-//   id   Int    @id @default(autoincrement())
-//   name String @unique
-// }
+  // model Tag {
+  //   id   Int    @id @default(autoincrement())
+  //   name String @unique
+  // }
 
-// model Category {
-//   id      Int      @id @default(autoincrement())
-//   name    String   @unique
-//   experts Expert[]
-// }
+  // model Category {
+  //   id      Int      @id @default(autoincrement())
+  //   name    String   @unique
+  //   experts Expert[]
+  // }
 
-// model Expert {
-//   id         Int       @id @default(autoincrement())
-//   bio        String    @db.Text
-//   city       String
-//   priceStart Decimal
-//   rating     Float     @default(0.0)
-//   experience Int
-//   profilePic  String?
-//   createdAt DateTime @default(now())
-// updatedAt DateTime @updatedAt
+  // model Expert {
+  //   id         Int       @id @default(autoincrement())
+  //   bio        String    @db.Text
+  //   city       String
+  //   priceStart Decimal
+  //   rating     Float     @default(0.0)
+  //   experience Int
+  //   profilePic  String?
+  //   createdAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
 
-// userId      Int       @unique
-//   user        User      @relation(fields: [userId], references: [id])
-//   categoryId  Int
+  // userId      Int       @unique
+  //   user        User      @relation(fields: [userId], references: [id])
+  //   categoryId  Int
 
-//   category    Category  @relation(fields: [categoryId], references: [id])
-//   bookings    Booking[]
-//   reviews     Review[]  
-// }
-
-
-
-// model Booking {
-//   id          Int      @id @default(autoincrement())
-//   date        DateTime
-//   status      STATUS   @default("PENDING")
-//   description String
-//   userId      Int
-
-//   client      User     @relation(fields: [userId], references: [id])
-//   expertId    Int
-//   expert      Expert   @relation(fields: [expertId], references: [id])
-// }
-// model Review{
-//   id Int @id @default(autoincrement())
-//   rating Int
-//   comment String?
-//   createdAt DateTime @default(now())
-//   clientId  Int
-//   client    User     @relation(fields: [clientId], references: [id])
-//   expertId  Int
-//   expert    Expert   @relation(fields: [expertId], references: [id])
-
-// }
+  //   category    Category  @relation(fields: [categoryId], references: [id])
+  //   bookings    Booking[]
+  //   reviews     Review[]  
+  // }
 
 
-generator client {
-  provider = "prisma-client-js"
-}
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+  // model Booking {
+  //   id          Int      @id @default(autoincrement())
+  //   date        DateTime
+  //   status      STATUS   @default("PENDING")
+  //   description String
+  //   userId      Int
 
-// ======================= ENUMS =======================
-enum Role {
-  Client
-  Expert
-}
+  //   client      User     @relation(fields: [userId], references: [id])
+  //   expertId    Int
+  //   expert      Expert   @relation(fields: [expertId], references: [id])
+  // }
+  // model Review{
+  //   id Int @id @default(autoincrement())
+  //   rating Int
+  //   comment String?
+  //   createdAt DateTime @default(now())
+  //   clientId  Int
+  //   client    User     @relation(fields: [clientId], references: [id])
+  //   expertId  Int
+  //   expert    Expert   @relation(fields: [expertId], references: [id])
 
-enum STATUS {
-  COMPLETED
-  PENDING
-  CONFIRMED
-  REJECTED
-}
+  // }
 
-// ======================= MODELS =======================
-model User {
-  id          Int       @id @default(autoincrement())
-  username    String
-  email       String    @unique
-  password    String
-  phoneNumber String
-  role        Role
-  experts     Expert?   // one-to-one with Expert if user is an expert
-  bookings    Booking[] // bookings made by user
-  reviews     Review[]  // reviews given by user
-}
 
-model Tag {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-model Category {
-  id      Int       @id @default(autoincrement())
-  name    String    @unique
-  experts Expert[]
-}
+  datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+  }
 
-model Expert {
-  id          Int       @id @default(autoincrement())
-  bio         String    @db.Text
-  city        String
-  priceStart  Decimal
-  rating      Float     @default(0.0)
-  experience  Int
-  profilePic  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  // ======================= ENUMS =======================
+  enum Role {
+    Client
+    Expert
+  }
 
-  userId      Int       @unique
-  user        User      @relation(fields: [userId], references: [id])
-  categoryId  Int
-  category    Category  @relation(fields: [categoryId], references: [id])
+  enum STATUS {
+    COMPLETED
+    PENDING
+    CONFIRMED
+    REJECTED
+  }
 
-  bookings    Booking[]
-  reviews     Review[]
-}
+  // ======================= MODELS =======================
+  model User {
+    id          Int       @id @default(autoincrement())
+    username    String
+    email       String    @unique
+    password    String
+    phoneNumber String
+    role        Role
+    experts     Expert?   // one-to-one with Expert if user is an expert
+    bookings    Booking[] // bookings made by user
+    reviews     Review[]  // reviews given by user
+  }
 
-model Booking {
-  id          Int      @id @default(autoincrement())
-  date        DateTime
-  status      STATUS   @default(PENDING)
-  description String
-  userId      Int
-  expertId    Int
+  model Tag {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+  }
 
-  client      User     @relation(fields: [userId], references: [id])
-  expert      Expert   @relation(fields: [expertId], references: [id])
-}
+  model Category {
+    id      Int       @id @default(autoincrement())
+    name    String    @unique
+    experts Expert[]
+  }
 
-model Review {
-  id        Int      @id @default(autoincrement())
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
-  clientId  Int
-  expertId  Int
+  model Expert {
+    id          Int       @id @default(autoincrement())
+    bio         String    @db.Text
+    city        String
+    priceStart  Decimal
+    rating      Float     @default(0.0)
+    experience  Int
+    profilePic  String?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 
-  client    User     @relation(fields: [clientId], references: [id])
-  expert    Expert   @relation(fields: [expertId], references: [id])
-}
+    userId      Int       @unique
+    user        User      @relation(fields: [userId], references: [id])
+    categoryId  Int
+    category    Category  @relation(fields: [categoryId], references: [id])
+
+    bookings    Booking[]
+    reviews     Review[]
+  }
+
+  model Booking {
+    id          Int      @id @default(autoincrement())
+    date        DateTime
+    status      STATUS   @default(PENDING)
+    description String
+    userId      Int
+    expertId    Int
+
+    client      User     @relation(fields: [userId], references: [id])
+    expert      Expert   @relation(fields: [expertId], references: [id])
+  }
+
+  model Review {
+    id        Int      @id @default(autoincrement())
+    rating    Int
+    comment   String?
+    createdAt DateTime @default(now())
+    clientId  Int
+    expertId  Int
+
+    client    User     @relation(fields: [clientId], references: [id])
+    expert    Expert   @relation(fields: [expertId], references: [id])
+  }
 
