@@ -11,7 +11,6 @@ import MyBooking from "./pages/MyBooking";
 import Profile from "./components/Profile";
 import ProtectedRoute from "./ProtectedRoute";
 import ExpertDashboard from "./pages/Expert";   
-import MyReviews from "./pages/MyReviews"
 
 function Layout({ children }) {
   const location = useLocation();
@@ -57,12 +56,6 @@ function App() {
           <Route path="/services/:type" element={<Services />} />
           <Route path="/bookings/:expertId" element={<Bookings />} />
           <Route path="/mybookings" element={<MyBooking />} />
-          <Route path="/myreviews" element={
-  <ProtectedRoute role="Client">
-    <MyReviews />
-  </ProtectedRoute>
-} />
-
           <Route path="/expert/orders" element={
             <ProtectedRoute role="Expert">
               <MyBooking />

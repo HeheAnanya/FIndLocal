@@ -20,7 +20,6 @@ const MyBooking = () => {
             try {
                 
                 let res = await api.get("/mybookings")
-                
                 setBookings(res.data.bookings.map((b)=>(
                     {
                         ...b,
