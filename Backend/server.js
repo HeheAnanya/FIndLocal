@@ -358,8 +358,6 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
 });
 
 
-
-
 app.get("/profile", VerifyToken, (req, res) => {
     return res.status(200).json({ message: "Access granted", user: req.user })
 })

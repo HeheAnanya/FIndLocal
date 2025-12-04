@@ -56,6 +56,12 @@ function App() {
           <Route path="/services/:type" element={<Services />} />
           <Route path="/bookings/:expertId" element={<Bookings />} />
           <Route path="/mybookings" element={<MyBooking />} />
+          <Route path="/myreviews" element={
+  <ProtectedRoute role="Client">
+    <MyReviews />
+  </ProtectedRoute>
+} />
+
           <Route path="/expert/orders" element={
             <ProtectedRoute role="Expert">
               <MyBooking />
