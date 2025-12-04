@@ -281,12 +281,13 @@ app.put("/bookings/:id", VerifyToken, async (req, res) => {
         res.status(500).json({ error: "Failed to update booking" });
     }
 })
-
 app.get("/mybookings", VerifyToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: req.user.userId },
-            include: { experts: true }
+            include: {
+                experts: true
+            }
         });
 
         if (!user) {
@@ -294,8 +295,7 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
         }
 
         let bookings = [];
-        const role = user.role;
-        if (role === "Expert") {
+        if (user.role === "Expert") {
 
             if (!user.experts || !user.experts.id) {
                 return res.status(200).json({
@@ -310,14 +310,15 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                     client: {
                         select: { username: true, phoneNumber: true }
                     },
-                    reviews: {
-                        select: {
-                            rating: true,
-                            comment: true,
-                            client: { select: { username: true } }
+                    expert: {
+                        include: {
+                            user: { select: { username: true } },
+                            category: true
                         }
-                    }
-                }
+                    },
+                    reviews: true 
+                },
+                orderBy: { date: "desc" }
             });
         }
         else {
@@ -331,18 +332,18 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                         }
                     },
                     reviews: {
-                        where: { clientId: user.id },
+                        where: { clientId: user.id },  
                         select: {
                             id: true,
                             rating: true,
                             comment: true
                         }
                     }
-                }
+                },
+                orderBy: { date: "desc" }
             });
         }
-
-        res.status(200).json({
+        res.json({
             bookings,
             stats: {
                 total: bookings.length,
@@ -353,9 +354,10 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
 
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: "Error fetching role" });
+        res.status(500).json({ error: "Error fetching bookings" });
     }
 });
+
 
 
 app.get("/profile", VerifyToken, (req, res) => {
