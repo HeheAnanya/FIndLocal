@@ -312,7 +312,12 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                     client: {
                         select: { username: true, phoneNumber: true }
                     },
-                    reviews: true
+                    expert:{
+                        include:{
+                            user:{select:{username:true}},
+                            category:true
+                        }
+                    }
                 },
 
             })
