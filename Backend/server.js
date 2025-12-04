@@ -9,11 +9,14 @@ const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
 app.use(express.json())
 app.use(cors({
-  origin:[ "https://f-ind-local.vercel.app",
-  "https://f-ind-local.vercel.app/",
-    "http://localhost:5173"],
+  origin: [
+    "https://f-ind-local.vercel.app",
+    "http://localhost:5173"
+  ],
   credentials: true,
-}))
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
+
 app.get("/", (req, res) => {
     return res.status(200).json("Welcome Back")
 })
