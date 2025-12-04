@@ -285,66 +285,63 @@ app.put("/bookings/:id", VerifyToken, async (req, res) => {
 app.get("/mybookings", VerifyToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
-            where: {
-                id: req.user.userId
-            },
-            include: {
-                experts: true
-            }
-        })
+            where: { id: req.user.userId },
+            include: { experts: true }
+        });
+
         if (!user) {
-            return res.status(404).json({ error: "User not found" })
+            return res.status(404).json({ error: "User not found" });
         }
-        let bookings = []
-        const role = user.role
+
+        let bookings = [];
+        const role = user.role;
         if (role === "Expert") {
+
             if (!user.experts || !user.experts.id) {
                 return res.status(200).json({
                     bookings: [],
                     stats: { total: 0, upcoming: 0, completed: 0 }
                 });
             }
+
             bookings = await prisma.booking.findMany({
-                where: {
-                    expertId: user.experts.id
-                },
+                where: { expertId: user.experts.id },
                 include: {
                     client: {
                         select: { username: true, phoneNumber: true }
                     },
-                    expert:{
-                        include:{
-                            user:{select:{username:true}},
-                            category:true
+                    reviews: {
+                        select: {
+                            rating: true,
+                            comment: true,
+                            client: { select: { username: true } }
                         }
                     }
-                },
-
-            })
+                }
+            });
         }
         else {
             bookings = await prisma.booking.findMany({
-                where: {
-                    userId: user.id
-                },
+                where: { userId: user.id },
                 include: {
                     expert: {
                         include: {
                             user: { select: { username: true } },
-                            category: true,
-                            reviews:true
-                        },
-                        
-
+                            category: true
+                        }
                     },
-                    // reviews: true
-                    // reviews:{
-                    //     where:{clientId:user.id},
-                    //     select:{id: true, rating: true, comment: true}
-                    // }
+                    reviews: {
+                        where: { clientId: user.id },
+                        select: {
+                            id: true,
+                            rating: true,
+                            comment: true
+                        }
+                    }
                 }
-            })
+            });
         }
+
         res.status(200).json({
             bookings,
             stats: {
@@ -352,14 +349,17 @@ app.get("/mybookings", VerifyToken, async (req, res) => {
                 upcoming: bookings.filter(b => b.status === "CONFIRMED").length,
                 completed: bookings.filter(b => b.status === "COMPLETED").length
             }
-        })
-    }
+        });
 
-    catch (err) {
-        console.log(err)
+    } catch (err) {
+        console.log(err);
         res.status(500).json({ error: "Error fetching role" });
     }
-})
+});
+
+
+
+
 app.get("/profile", VerifyToken, (req, res) => {
     return res.status(200).json({ message: "Access granted", user: req.user })
 })
