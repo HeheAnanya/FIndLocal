@@ -87,7 +87,7 @@ const Profile = () => {
 
                     <label>Phone Number:</label>
                     <input type='text' value={userData.phoneNumber} style={{ background: '#f0f0f0' }} onChange={(handleChanges)}
-                        name='phoneNumber' />
+                        name='phoneNumber' maxLength={10}/>
                 </form>
                 <button
                     type="button"

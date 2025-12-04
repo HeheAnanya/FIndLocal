@@ -8,9 +8,6 @@ const Expert = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // let res = await api.get("/expert/bookings"); 
-
-                // setBookings(res.data);
                 let res = await api.get("/mybookings");
 setBookings(res.data.bookings);
             } catch (err) {
