@@ -1,0 +1,122 @@
+.navbar-hidden { display: none !important; }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 48px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
+  box-shadow: var(--shadow-xs);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+  cursor: pointer;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.navLink {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.navLink button {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  border: none;
+}
+
+.navLink button:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: none;
+  box-shadow: none;
+}
+
+.navLink .nav-btn-primary {
+  background: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.navLink .nav-btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(28,93,153,0.2);
+}
+
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.nav-mobile-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+    height: 56px;
+  }
+
+  .nav-mobile-toggle { display: flex; }
+
+  .navLink {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    gap: 4px;
+  }
+
+  .navLink.open { display: flex; }
+
+  .navLink button, .navLink .nav-btn-primary {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+    padding: 12px 16px;
+  }
+}
