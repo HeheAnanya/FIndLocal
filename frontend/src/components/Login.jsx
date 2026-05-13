@@ -24,25 +24,13 @@ const Login = () => {
       localStorage.setItem("accesstoken", JSON.stringify(token))
       alert(`👋 Welcome back, ${users.username}!`)
       // navigate("/")
-      if (users.role === "Expert") {
-        try {
-          const expertProfile = await api.get("/expert/profile")
-
-          if (expertProfile.data) {
-            navigate("/expert/profile")
-          } else {
-
-            navigate("/expert/profile")
-          }
-        } catch (e) {
-          console.log(e)
-          navigate("/expert")
-        }
+      if (users.role==="Expert"){
+        navigate("/expert/dashboard")
       }
-      else {
-
-        navigate("/profile")
+      else{
+        navigate("/home")
       }
+      window.location.reload()
     } catch (err) {
       console.error("Login error:", err)
       if (err.response && err.response.data && err.response.data.error) {
@@ -57,38 +45,24 @@ const Login = () => {
   }
 
   return (
-    <div className='auth-container'>
-      <div className='auth-card'>
-        <div className="auth-header">
+    <div className='authContainer'>
+      <div className='authCard'>
+        <div className="authHeader">
           <h1>Welcome Back</h1>
           <p>Login to continue managing your bookings</p>
         </div>
 
-        <form className='auth-form' onSubmit={handleSubmit}>
-          <div className="form-group">
+        <form className='authForm' onSubmit={handleSubmit}>
+          <div className="form">
             <label>Email</label>
-            <input
-              type='email'
-              placeholder='Enter your email'
-              required
-              name='email'
-              value={form.email}
-              onChange={handleChange}
-            />
+            <input type='email' placeholder='Enter your email' required name='email' value={form.email} onChange={handleChange}/>
           </div>
 
-          <div className="form-group">
+          <div className="form">
             <label>Password</label>
-            <input
-              type='password'
-              placeholder='Enter your password'
-              required
-              name='password'
-              value={form.password}
-              onChange={handleChange}
-            />
+            <input type='password' placeholder='Enter your password'required name='password' value={form.password} 
+            onChange={handleChange}/>
           </div>
-
           <button type="submit" className="auth-btn">Login</button>
         </form>
 

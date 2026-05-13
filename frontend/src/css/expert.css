@@ -1,13 +1,18 @@
 /* src/css/expert.css */
 
 :root {
-  --primary: #2563eb; /* Royal Blue */
+  --primary: #2563eb;
+  /* Royal Blue */
   --primary-hover: #1d4ed8;
-  --bg-page: #f8fafc; /* Slate 50 */
+  --bg-page: #f8fafc;
+  /* Slate 50 */
   --bg-card: #ffffff;
-  --text-main: #0f172a; /* Slate 900 */
-  --text-secondary: #64748b; /* Slate 500 */
-  --border-color: #e2e8f0; /* Slate 200 */
+  --text-main: #0f172a;
+  /* Slate 900 */
+  --text-secondary: #64748b;
+  /* Slate 500 */
+  --border-color: #e2e8f0;
+  /* Slate 200 */
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -33,15 +38,16 @@ body {
 }
 
 /* --- Card Containers --- */
-.expert-form-wrapper,
+.expertForm,
 .profile-view {
   background: var(--bg-card);
+  backdrop-filter: var(--glass-filter);
   width: 100%;
   max-width: 800px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 48px;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -51,7 +57,7 @@ body {
 /* --- Typography --- */
 .expert h2,
 .profile-view h2,
-.expert-form-wrapper h2 {
+.expertForm h2 {
   font-size: 28px;
   font-weight: 800;
   color: var(--text-main);
@@ -63,7 +69,7 @@ body {
 
 .expert h3,
 .profile-view h3,
-.expert-form-wrapper h3 {
+.expertForm h3 {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-main);
@@ -75,14 +81,14 @@ body {
 }
 
 /* --- Forms & Inputs --- */
-.expert-form-wrapper form,
+.expertForm form,
 .expert-profile form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.expert-form-wrapper label,
+.expertForm label,
 .expert-profile label {
   font-size: 13px;
   font-weight: 700;
@@ -93,9 +99,9 @@ body {
   display: block;
 }
 
-.expert-form-wrapper input,
-.expert-form-wrapper textarea,
-.expert-form-wrapper select,
+.expertForm input,
+.expertForm textarea,
+.expertForm select,
 .expert-profile input,
 .expert-profile textarea,
 .expert-profile select {
@@ -111,27 +117,28 @@ body {
   box-shadow: none !important;
 }
 
-.expert-form-wrapper input:focus,
-.expert-form-wrapper textarea:focus,
-.expert-form-wrapper select:focus {
+.expertForm input:focus,
+.expertForm textarea:focus,
+.expertForm select:focus {
   background: #fff !important;
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
 }
 
-.expert-form-wrapper textarea {
+.expertForm textarea {
   min-height: 140px;
   line-height: 1.6;
 }
 
 /* --- Buttons --- */
-.expert-form-wrapper button,
+.expertForm button,
 .expert-profile button,
 .profile-view button {
   background-color: var(--primary) !important;
   color: white !important;
   padding: 16px 32px !important;
-  border-radius: 9999px !important; /* Pill shape */
+  border-radius: 9999px !important;
+  /* Pill shape */
   font-weight: 700 !important;
   font-size: 15px !important;
   border: none !important;
@@ -143,7 +150,7 @@ body {
   align-self: flex-start !important;
 }
 
-.expert-form-wrapper button:hover,
+.expertForm button:hover,
 .expert-profile button:hover,
 .profile-view button:hover {
   background-color: var(--primary-hover) !important;
@@ -151,7 +158,7 @@ body {
   box-shadow: var(--shadow-md) !important;
 }
 
-.expert-form-wrapper button:disabled {
+.expertForm button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none !important;
@@ -204,7 +211,7 @@ button[style*="background: #10b981"]:hover {
   color: #15803d !important;
 }
 
-.expert-form-wrapper > div > div[style*="border: 1px solid"] {
+.expertForm>div>div[style*="border: 1px solid"] {
   background: #fff !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-md) !important;
@@ -214,7 +221,7 @@ button[style*="background: #10b981"]:hover {
   transition: all 0.2s ease !important;
 }
 
-.expert-form-wrapper > div > div[style*="border: 1px solid"]:hover {
+.expertForm>div>div[style*="border: 1px solid"]:hover {
   box-shadow: var(--shadow-md) !important;
   transform: translateY(-2px) !important;
   border-color: #cbd5e1 !important;
@@ -305,52 +312,134 @@ span[class*="status-"] {
 }
 
 /* --- Reviews Section --- */
-.expert-form-wrapper > div[style*="margin-top: 40px"] {
-    border-top: 1px solid var(--border-color) !important;
+.expertForm>div[style*="margin-top: 40px"] {
+  border-top: 1px solid var(--border-color) !important;
 }
 
-.expert-form-wrapper > div > div[style*="background: white"] {
-    background: #f8fafc !important;
-    border: 1px solid transparent !important;
-    box-shadow: none !important;
+.expertForm>div>div[style*="background: white"] {
+  background: #f8fafc !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
 }
 
 /* --- Expert Grid (Services Page) --- */
-.expert-form-wrapper > div[style*="display: grid"] {
-    gap: 32px !important;
+.expertForm>div[style*="display: grid"] {
+  gap: 32px !important;
 }
 
-.expert-form-wrapper > div[style*="display: grid"] > div {
-    border-radius: var(--radius-md) !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: var(--shadow-sm) !important;
-    padding: 32px !important;
+.expertForm>div[style*="display: grid"]>div {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: var(--bg-card) !important;
+  backdrop-filter: var(--glass-filter) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 32px !important;
+  transition: var(--transition) !important;
 }
 
-.expert-form-wrapper > div[style*="display: grid"] > div:hover {
-    box-shadow: var(--shadow-lg) !important;
-    transform: translateY(-4px) !important;
-    border-color: var(--primary) !important;
+.expertForm>div[style*="display: grid"]>div:hover {
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.04) !important;
+  transform: translateY(-5px) !important;
+  border-color: rgba(0, 102, 255, 0.2) !important;
+}
+
+/* Proximity UI: Distance text */
+.expertForm>div[style*="display: grid"]>div p:nth-of-type(1) {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 12px !important;
+  background: rgba(0, 102, 255, 0.08) !important;
+  border-radius: var(--radius-full) !important;
+  margin-bottom: 12px !important;
+  position: relative !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Pulsing dot for "Live/Local" effect */
+.expertForm>div[style*="display: grid"]>div p:nth-of-type(1)::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 0 rgba(0, 102, 255, 0.4);
+  animation: proximityPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes proximityPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.5);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(0, 102, 255, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0);
+  }
+}
+
+/* Rating Badge */
+.expertForm>div[style*="display: grid"]>div span {
+  background: var(--text-main) !important;
+  color: #ffffff !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius-full) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Price Highlight */
+.expertForm>div[style*="display: grid"]>div p:nth-of-type(3) {
+  font-size: 18px !important;
+  color: var(--text-main) !important;
+  font-weight: 800 !important;
+}
+
+/* Book Now Button */
+.expertForm>div[style*="display: grid"]>div button {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-full) !important;
+  padding: 14px !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: var(--transition) !important;
+  width: 100% !important;
+  margin-top: 16px !important;
+}
+
+.expertForm>div[style*="display: grid"]>div button:hover {
+  background: var(--primary-dark) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* --- Pagination --- */
 .pagination {
-    border-top: 1px solid var(--border-color);
-    padding: 24px;
-    background: #fff;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-top: 1px solid var(--border-color);
+  padding: 24px;
+  background: #fff;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
 .pagination button {
-    background: #fff !important;
-    border: 1px solid var(--border-color) !important;
-    color: var(--text-main) !important;
-    box-shadow: none !important;
-    padding: 10px 20px !important;
+  background: #fff !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-main) !important;
+  box-shadow: none !important;
+  padding: 10px 20px !important;
 }
 
 .pagination button:hover:not(:disabled) {
-    border-color: var(--primary) !important;
-    color: var(--primary) !important;
-    background: #eff6ff !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+  background: #eff6ff !important;
 }

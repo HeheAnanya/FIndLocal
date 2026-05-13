@@ -46,15 +46,15 @@ const SignUp = () => {
         }
     }
     return (
-        <div className='auth-container'>
-            <div className='auth-card'>
-                <div className="auth-header">
+        <div className='authContainer'>
+            <div className='authCard'>
+                <div className="authHeader">
                     <h1>Create Account</h1>
                     <p>Join us to find or provide local services</p>
                 </div>
 
-                <form className='auth-form' onSubmit={handleSubmit}>
-                    <div className="form-group">
+                <form className='authForm' onSubmit={handleSubmit}>
+                    <div className="form">
                         <label>Username</label>
                         <input
                             type='text'
@@ -66,7 +66,7 @@ const SignUp = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form">
                         <label>Email</label>
                         <input
                             type='email'
@@ -78,7 +78,7 @@ const SignUp = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form">
                         <label>Phone Number</label>
                         <input
                             type='text'
@@ -91,7 +91,7 @@ const SignUp = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form">
                         <label>Password</label>
                         <input
                             type='password'
@@ -103,7 +103,7 @@ const SignUp = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form">
                         <label>Role</label>
                         <select name="role" value={form.role} onChange={handleChange} required>
                             <option value="">Select your role</option>

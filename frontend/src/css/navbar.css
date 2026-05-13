@@ -1,4 +1,4 @@
-/* Hide Navbar on specific pages */
+/* Hide Navbar on specific pages
 .navbar-hidden {
     display: none !important;
 }
@@ -52,7 +52,6 @@
     box-shadow: none;
 }
 
-/* Primary Action Button in Navbar (e.g. Login) */
 .navLink button:last-child {
     background-color: var(--text-main);
     color: white;
@@ -66,4 +65,5 @@
 
 .navLink button:last-child {
     font-weight: 600;
-}
+} */
+

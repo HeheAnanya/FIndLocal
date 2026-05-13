@@ -5,18 +5,19 @@ const cors = require("cors")
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { VerifyToken } = require("./src/jwtMiddleware.js");
-const e = require("express");
+const axios = require("axios")
 const SECRET_KEY = process.env.SECRET_KEY
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 const app = express()
 app.use(express.json())
 app.use(cors({
-  origin: [
-    "https://f-ind-local.vercel.app",
-   "https://findlocal.vercel.app",
-    "http://localhost:5174"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+    origin:
+        //     "https://f-ind-local.vercel.app",
+        //    "https://findlocal.vercel.app",
+        "http://localhost:5173"
+    ,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 
 app.get("/", (req, res) => {
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 })
 
 app.post("/signup", async (req, res) => {
-    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&) 
+    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ //special characters = @$!%*?&
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let { username, email, password, phoneNumber, role } = req.body
     if (!email || !username || !password || !phoneNumber || !role || isNaN(Number(phoneNumber))) {
@@ -117,11 +118,19 @@ app.get("/categories", async (req, res) => {
 })
 
 app.put("/expert/profile", VerifyToken, async (req, res) => {
-    let { bio, city, priceStart, categoryId, experience } = req.body
+    let { bio, city, latitude, longitude, priceStart, categoryId, experience } = req.body
     const userId = req.user.userId
-    if (!bio || !city || !priceStart || !categoryId || !experience) {
-        return res.status(401).json("Missing Fields")
+    if (!bio || !city || !priceStart || !categoryId || !experience || !latitude || !longitude) {
+        return res.status(400).json("Missing Fields")
     }
+    latitude = parseFloat(latitude)
+    longitude = parseFloat(longitude)
+    if (isNaN(latitude) || isNaN(longitude)) {
+        return res.status(400).json({
+            error: "Invalid latitude or longitude"
+        });
+    }
+
     try {
         await prisma.expert.upsert({
             where: {
@@ -130,6 +139,8 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
             update: {
                 bio: bio,
                 city: city,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
                 priceStart: priceStart,
                 categoryId: Number(categoryId),
                 experience: Number(experience)
@@ -137,6 +148,8 @@ app.put("/expert/profile", VerifyToken, async (req, res) => {
             create: {
                 bio: bio,
                 city: city,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
                 priceStart: priceStart,
                 categoryId: Number(categoryId),
                 userId: userId,
@@ -175,69 +188,147 @@ app.get("/expert/profile", VerifyToken, async (req, res) => {
 
 app.get("/experts/:category", async (req, res) => {
     let { category } = req.params
-    let { city, search, sort, page = 1, limit = 6 } = req.query
+    let { latitude, longitude, radius = 3000, sort, page = 1, limit = 6 } = req.query
     limit = Number(limit)
     page = Number(page)
     let skip = (page - 1) * limit
-
-
-    let place = {
-        category: { name: category }
+    if (!latitude || !longitude || isNaN(Number(latitude)) || isNaN(Number(longitude))) {
+        return res.status(400).json({ "Message": "Missing Location or Invalid Location" })
     }
-    if (city) {
-        place.city = { contains: city }
-    }
-    if (search) {
-        place.OR = [
-            { bio: { contains: search } },
-            { user: { username: { contains: search } } }
-        ];
-    }
-    let orderBy = {}
-    if (sort === "price_asc") {
-        orderBy = { priceStart: 'asc' }
-    }
-    else if (sort === "price_desc") {
-        orderBy = { priceStart: "desc" }
-    }
-    else if (sort === "rating") {
-        orderBy = { rating: "desc" }
-    }
-    const totalCount = await prisma.expert.count({ where: place });
-
+    latitude = parseFloat(latitude)
+    longitude = parseFloat(longitude)
+    radius = Number(radius)
+    page = Number(page)
+    limit = Number(limit)
+    const offset = 0.03
     try {
-        const experts = await prisma.expert.findMany(
-            {
-                where: place,
-                orderBy: orderBy,
-                skip: skip,
-                take: limit,
-
-                include: {
-                    user: {
-                        select: {
-                            username: true,
-                            role: true
-                        }
-                    },
-                    reviews: {
-                        take: 3, orderBy: { createdAt: 'desc' }, include: {
-                            client: { select: { username: true } }
-                        }
+        let expert = await prisma.expert.findMany({
+            where: {
+                category: { name: category },
+                latitude: {
+                    gte: latitude - offset,
+                    lte: latitude + offset
+                },
+                longitude: {
+                    gte: longitude - offset,
+                    lte: longitude + offset
+                }
+            },
+            include: {
+                user: {
+                    select: {
+                        username: true
                     }
                 }
             }
-        )
-        if (experts.length === 0) {
-            return res.status(200).json({ "message": "No expert in this area" });
+        })
+        if (expert.length === 0) {
+            return (res.status(200).json({ experts: [], totalPages: 0 }))
         }
-        const totalPages = Math.ceil(totalCount / limit);
-        return res.status(200).json({ experts, totalPages });
+        const destination = expert.map(e => `${e.latitude},${e.longitude}`).join("|")
+        const googleRes = await axios.get(
+            "https://maps.googleapis.com/maps/api/distancematrix/json", {
+            params: {
+                origins: `${latitude},${longitude}`,
+                destinations: destination,
+                key: GOOGLE_MAPS_API_KEY
+            }
+        }
+        )
+        const distance = googleRes.data.rows[0].elements
+        let enriched = expert.map((expert, idx) => { 
+            const el = distance[idx]
+            if (!el || el.status !== "OK"){
+                 return null
+                }
+            return {...expert,distance: el.distance.value }}).filter(e => e && e.distance <= radius)
+            if (sort === "price_asc") {
+            enriched.sort((a, b) => a.priceStart - b.priceStart)
+            } 
+            else if (sort === "price_desc") {
+                enriched.sort((a, b) => b.priceStart - a.priceStart)
+            } 
+            else if (sort === "rating") {
+                enriched.sort((a, b) => b.rating - a.rating)
+            } 
+            else {
+                enriched.sort((a, b) => a.distance - b.distance)
+            }
+            const totalPages = Math.ceil(enriched.length / limit)
+            const start = (page - 1) * limit;
+            const paginated = enriched.slice(start, start + limit)
+
+        return res.status(200).json({
+            experts: paginated,
+            totalPages
+        })
+
+
     }
-    catch (er) {
-        console.log(er);
-        return res.status(500).json({ error: "Could not fetch experts" });
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({ "Error": err })
+
     }
+
+
+    // let place = {
+    //     category: { name: category }
+    // }
+    // if (city) {
+    //     place.city = { contains: city }
+    // }
+    // if (search) {
+    //     place.OR = [
+    //         { bio: { contains: search } },
+    //         { user: { username: { contains: search } } }
+    //     ];
+    // }
+    // let orderBy = {}
+    // if (sort === "price_asc") {
+    //     orderBy = { priceStart: 'asc' }
+    // }
+    // else if (sort === "price_desc") {
+    //     orderBy = { priceStart: "desc" }
+    // }
+    // else if (sort === "rating") {
+    //     orderBy = { rating: "desc" }
+    // }
+    // const totalCount = await prisma.expert.count({ where: place });
+
+    // try {
+    //     const experts = await prisma.expert.findMany(
+    //         {
+    //             where: place,
+    //             orderBy: orderBy,
+    //             skip: skip,
+    //             take: limit,
+
+    //             include: {
+    //                 user: {
+    //                     select: {
+    //                         username: true,
+    //                         role: true
+    //                     }
+    //                 },
+    //                 reviews: {
+    //                     take: 3, orderBy: { createdAt: 'desc' }, include: {
+    //                         client: { select: { username: true } }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     )
+    //     if (experts.length === 0) {
+    //         return res.status(200).json({ "message": "No expert in this area" });
+    //     }
+    //     const totalPages = Math.ceil(totalCount / limit);
+    //     return res.status(200).json({ experts, totalPages });
+    // }
+    // catch (er) {
+    //     console.log(er);
+    //     return res.status(500).json({ error: "Could not fetch experts" });
+    // }
 })
 
 app.post("/bookings", VerifyToken, async (req, res) => {
@@ -365,36 +456,37 @@ app.put("/user/change_password", VerifyToken, async (req, res) => {
         res.status(500).json({ error: er });
     }
 })
-app.put("/user/update",VerifyToken,async (req,res)=>{
-    
-        let { username, email, phoneNumber } = req.body
-        if (!username|| !email || !phoneNumber){
-            return res.status(400).json({"Message":"Missing Credentials"})
-        }
-try{
-    const updated = await prisma.user.update({
-        where:{
-            id:req.user.userId
-        },
-        data:{
-            username:username,
-            phoneNumber:phoneNumber,
-            email:email
-        },
-        select: {
+app.put("/user/update", VerifyToken, async (req, res) => {
+
+    let { username, email, phoneNumber } = req.body
+    if (!username || !email || !phoneNumber) {
+        return res.status(400).json({ "Message": "Missing Credentials" })
+    }
+    try {
+        const updated = await prisma.user.update({
+            where: {
+                id: req.user.userId
+            },
+            data: {
+                username: username,
+                phoneNumber: phoneNumber,
+                email: email
+            },
+            select: {
                 id: true,
                 username: true,
                 email: true,
                 phoneNumber: true
             }
-    })
-    return res.status(200).json({"Message":"Profile Updated Successfully",
-        user:updated
-    })
+        })
+        return res.status(200).json({
+            "Message": "Profile Updated Successfully",
+            user: updated
+        })
     }
-    catch(er){
+    catch (er) {
         console.log(er)
-        return res.status(500).json({error:er})
+        return res.status(500).json({ error: er })
     }
 })
 

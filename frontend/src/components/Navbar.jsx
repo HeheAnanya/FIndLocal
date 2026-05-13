@@ -7,41 +7,65 @@ const Navbar = () => {
     const navigate = useNavigate()
     const location = useLocation()
     let [role, setRole] = useState("")
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        const user = localStorage.getItem("user")
-        if (user) {
-            const person = JSON.parse(user)
+        const found = localStorage.getItem("user")
+        if (found) {
+            const person = JSON.parse(found)
+            setUser(person)
             setRole(person.role)
         }
-    }, [])
+    }, [location.pathname])
     const isAuthPage = location.pathname === '/login' || location.pathname === '/signup'
-    const viewer = JSON.parse(localStorage.getItem("user") || "{}");
-
-
-    return (
-        <nav className={`navbar ${isAuthPage ? 'navbar-hidden' : ''}`}>
+    let services = ["Plumber", "Electrician", "Cleaner", "Painter"]
+    function logout(){
+        localStorage.removeItem("user")
+        localStorage.removeItem("accesstoken")
+        setUser(null)
+        setRole("")
+        navigate("/login")
+    }
+    if (isAuthPage){
+        return null
+    }    return (
+        <nav className="navbar">
             <div className="logo" onClick={() => {
-                if (role==="Expert"){
+                if(!user){
+                    navigate("/signup")
+                }
+                else if (role==="Expert"){
                     navigate("/expert/dashboard")
                 }
-                else if (role === "Client") navigate("/home")
+                else if (role === "Client"){ navigate("/home")}
                 else navigate("/signup")
             }}>FindLocal</div>
+            {user?.role==="Client" &&
+            <div className='navMain'>
+                {services.map((e)=>(
+                    <span key={e} onClick={()=>(navigate(`/services/${e}`))} style={{cursor:'pointer',fontWeight:500}}>{e}</span>
+                ))}
+                </div>}
             <div className='navLink'>
-                {role === "Expert" ? (
+                {!user && (
                     <>
-                        <button onClick={() => navigate("/expert/orders")}>My Orders</button>
-                        <button onClick={() => navigate("/expert/profile")}>Profile</button>
+                    <button onClick={()=>(navigate("/login"))}>Login</button>
+                    <button onClick={()=>(navigate("/signup"))}>Sign Up</button>
                     </>
-                ) : role === "Client" ? (
+                )}
+                {user?.role==="Client" && (
                     <>
-                        <button onClick={() => navigate("/mybookings")}>My Bookings</button>
-                        <button onClick={() => navigate("/profile")}>Profile</button>
+                    <button onClick={()=>(navigate("/mybookings"))}>My Bookings</button>
+                    <button onClick={()=>(navigate("/profile"))}>Profile</button>
+                    <button onClick={logout}>Logout</button>
                     </>
-                ) : (
+                )}
+                {user?.role==="Expert" && (
                     <>
-                        <button onClick={() => navigate("/login")}>Login</button>
+                    <button onClick={()=>(navigate("/expert/orders"))}>My Orders</button>
+                    <button onClick={()=>(navigate("/expert/profile"))}>Profile</button>
+                    <button onClick={logout}>Logout</button>
+                    
                     </>
                 )}
             </div>
